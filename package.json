@@ -1,0 +1,19 @@
+{
+  "name": "itay-upsell-and-cart-plugin",
+  "version": "1.0.0",
+  "description": "A plugin that gives the store owner a feature to output a new products slider at the product page to increase sales. Also implements a dynamic cart.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LaNguAx/itay-upsell-and-cart-plugin.git"
+  },
+  "author": "Itay Andre Aknin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LaNguAx/itay-upsell-and-cart-plugin/issues"
+  },
+  "homepage": "https://github.com/LaNguAx/itay-upsell-and-cart-plugin#readme"
+}

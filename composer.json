@@ -1,0 +1,18 @@
+{
+    "name": "itay/itay-upsell-and-cart-plugin",
+    "description": "A plugin that gives the store owner a feature to output a new products slidera t the product page to increase sales. Also implements a dynamic cart.",
+    "type": "project",
+    "license": "GPL",
+    "autoload": {
+        "psr-4": {
+            "Itay\\ItayUpsellAndCartPlugin\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Itay Andre Aknin"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}
