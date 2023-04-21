@@ -32,6 +32,27 @@ function deactivate_itay_plugin() {
 }
 register_deactivation_hook(__FILE__, 'deactivate_itay_plugin');
 
-if (class_exists('Inc\\Init')) {
-  Inc\Init::register_services();
+include_once(ABSPATH . 'wp-admin/includes/plugin.php');
+if (is_plugin_active('woocommerce/woocommerce.php')) {
+  if (class_exists('Inc\\Init')) {
+    Inc\Init::register_services();
+  }
+} else {
+  function deactivateThePlugin() {
+    deactivate_plugins('/itay-upsell-and-cart-plugin/itay-upsell-and-cart-plugin.php');
+    $_GET = array();
+  }
+  add_action('admin_init', 'deactivateThePlugin');
+
+  function activationFailedMessage() {
+    global $pagenow;
+    if ($pagenow === 'plugins.php') {
+?>
+      <div class="notice notice-error is-dismissible">
+        <p><?php _e('Error: Itay Upsell & Cart Plugin failed to activate. Please check you have Woocommerce activated before activating the plugin!', 'sample-text-domain'); ?></p>
+      </div>
+
+<?php }
+  }
+  add_action('admin_notices', 'activationFailedMessage');
 }

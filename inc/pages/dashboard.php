@@ -24,7 +24,13 @@ class Dashboard {
     $this->settings_api = new Settings();
 
     $this->setPage();
+    $this->setDefaultSubPage();
     $this->setSubPages();
+
+    add_action('woocommerce_product_thumbnails', function () {
+      echo 'hello from dashboard.php';
+    });
+
 
     $this->settings_api->setPages($this->page)->withSubPage($this->default_subpage)->setSubPages($this->subpages)->register();
   }
@@ -43,7 +49,7 @@ class Dashboard {
     );
   }
 
-  public function defaultSubPage(string $title = 'Dashboard') {
+  public function setDefaultSubPage(string $title = 'Dashboard') {
     $default_subpage = array(
       array(
         'parent_slug' => 'itay_upsell_and_cart_plugin',
