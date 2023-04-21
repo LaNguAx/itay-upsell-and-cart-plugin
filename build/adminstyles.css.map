@@ -1,1 +1,0 @@
-{"version":3,"file":"adminstyles.css","mappings":";;;AAAA;EACE,qBAAqB;AACvB","sources":["webpack://itay-upsell-and-cart-plugin/./src/admin/css/modules/dashboard.css"],"sourcesContent":["body {\r\n  background-color: red;\r\n}\r\n"],"names":[],"sourceRoot":""}

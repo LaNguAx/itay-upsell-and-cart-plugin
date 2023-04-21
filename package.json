@@ -4,7 +4,7 @@
   "description": "A plugin that gives the store owner a feature to output a new products slider at the product page to increase sales. Also implements a dynamic cart.",
   "main": "index.js",
   "scripts": {
-    "start": "wp-scripts start src/admin/css/adminstyles.js src/user/css/userstyles.js src/user/js/slider.js src/admin/js/dashboard.js",
+    "start": "wp-scripts start src/admin/css/adminstyles.scss src/user/css/userstyles.scss src/user/js/slider.js src/admin/js/dashboard.js src/admin/js/upsell-manager.js",
     "build": "wp-scripts build"
   },
   "repository": {
