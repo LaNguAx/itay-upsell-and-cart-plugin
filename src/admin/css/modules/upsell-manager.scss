@@ -1,12 +1,82 @@
 .wrap.upsell-manager {
-  h3.categories-selected {
-    margin-bottom: 2rem;
-    font-size: 2rem;
+  .wrap.upsell-products-container {
+    * {
+      font-family: sans-serif;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
   }
-  h4 {
-    font-size: 1.2rem;
+  .categories-selected {
+    margin-bottom: 2rem !important;
+    font-size: 2rem;
+    text-decoration: underline;
   }
   .hidden {
     display: none;
+  }
+
+  .container {
+    padding: 2rem !important;
+    margin-bottom: 3rem !important;
+  }
+
+  .products-grid {
+    display: flex;
+    flex-wrap: wrap;
+
+    gap: 3rem;
+  }
+
+  .product-container {
+    width: 250px;
+    height: 250px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 2rem !important;
+
+    .product-image {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      margin-bottom: 0.5rem !important;
+
+      img {
+        width: 100%;
+        height: 100%;
+      }
+      input[type="checkbox"] {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: none;
+        cursor: pointer;
+
+        &::before {
+        }
+        &:checked {
+          content: "";
+          width: 100%;
+          height: 100%;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          position: absolute;
+          border: 2px solid blue;
+        }
+      }
+    }
+    .product-name {
+      font-size: 1.5rem;
+    }
+    .produce-price {
+      font-size: 1.2rem;
+    }
+  }
+  .button.button-primary {
+    padding: 0.5rem;
   }
 }

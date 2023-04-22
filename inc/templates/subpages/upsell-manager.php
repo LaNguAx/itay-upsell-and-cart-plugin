@@ -2,6 +2,7 @@
   <h1></h1>
   <?php settings_errors();
   $categories_exist = get_option('iucp_upsell_manager_setting');
+  $products_selected = get_option('iucp_upsell_products');
   ?>
 
   <ul class="nav nav-tabs">
@@ -20,29 +21,46 @@
       </form>
     </div>
     <div id="tab-2" class="tab-pane <?php echo ($categories_exist ? 'active' : 'hidden') ?>">
-      <h3>Select Products</h3>
-      <p>Select the products you'd like to showcase in the slideshow in the product page!</p>
+      <h3 class="tab-heading">Select Products</h3>
+      <p class="tab-subheading">Select the products you'd like to showcase in the slideshow in the product page!</p>
 
-      <div class="wrap">
+      <div class="wrap upsell-products-container">
         <form action="options.php" method="post">
           <?php
           foreach ($categories_exist as $key => $val) {
           ?>
-            <h3 class="categories-selected"><?php echo strtoupper($key[0]) . substr($key, 1) ?></h3>
+            <div class="container">
+              <h3 class="categories-selected"><?php echo strtoupper($key[0]) . substr($key, 1) ?></h3>
 
-            <?php
-            foreach ($val as $product) {
-            ?>
-              <?php echo $product['product_image'] ?>
-              <span><?php echo $product['product_name'] ?></span>
-              <input type="checkbox" value="1" name="<?php echo $key . '[' . $product['product_name'] . ']' ?>">
+              <div class="products-grid">
+                <?php
+                foreach ($val as $product) {
+                  $checked = (isset($products_selected[$key][$product['product_name']]));
+                ?>
+                  <div class="product-container">
+                    <div class="product-image">
+                      <input type="checkbox" class="product-name" id="<?php echo $product['product_name'] ?>" name="<?php echo 'upsell_products[' . $key . '][' . $product['product_name'] . ']' ?>" <?php echo ($checked ? 'checked' : '') ?> value="<?php echo $product['product_id'] ?>">
+                      <label for="<?php echo $product['product_name'] ?>"><?php echo $product['product_image'] ?></label>
+                    </div>
+                    <div class="product-attributes">
+                      <p class="product-name"><?php echo $product['product_name'] ?></p>
+                      <p class="product-price"><?php echo $product['product_price']  ?><span>$</span></p>
+                    </div>
 
+                  </div>
+                <?php
+
+                }
+                ?>
+              </div>
+            </div>
           <?php
-            }
           }
+          ?>
+          <br class="line-breaker">
+          <?php
           settings_fields('iucp_upsell_manager_settings');
-          submit_button('Update Products', 'primary', 'submit', false);
-
+          submit_button('Update Products', 'primary', 'submit', true);
           ?>
           <input type="hidden" name="update_products" value="1">
         </form>

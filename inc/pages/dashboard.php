@@ -28,9 +28,6 @@ class Dashboard {
     $this->setDefaultSubPage();
     // $this->setSubPages();
 
-    add_action('woocommerce_product_thumbnails', function () {
-      echo 'hello from dashboard.php';
-    });
 
 
     $this->settings_api->setPages($this->page)->withSubPage($this->default_subpage)->setSubPages($this->subpages)->register();

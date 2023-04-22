@@ -1,0 +1,175 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Sarabun:wght@300&display=swap");
+#slider {
+  &.hidden {
+    display: none;
+  }
+  position: relative;
+  width: min-content;
+  margin: auto;
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  .slider-container {
+    width: 280px * 3;
+    padding-top: 50px;
+    overflow-x: hidden;
+    position: relative;
+    & .slider {
+      display: flex;
+
+      &.animation {
+        transition: 500ms ease-in-out;
+      }
+
+      & .slider-item {
+        min-width: 280px;
+        padding: 20px;
+
+        .slide-image > img {
+          border-radius: 100rem;
+        }
+
+        & .slide {
+          box-shadow: 0 0 20px #cdcddd;
+          border-radius: 8px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          padding-bottom: 20px;
+
+          & .slide-image {
+            width: 100%;
+            margin-top: -30%;
+            padding: 10px;
+            margin-bottom: 30px;
+            pointer-events: none;
+
+            & > img {
+              height: 150px;
+              margin: 0 auto;
+              display: block;
+            }
+          }
+
+          &:hover {
+            .slide-name,
+            .custom-line,
+            .row,
+            .row strong,
+            .row.custom-row > p {
+              color: #fff;
+            }
+            .row.custom-row > a {
+              background-color: #fff;
+              color: #ffbc43;
+            }
+            .slide-image > img {
+              transform: scale(1.2);
+            }
+            background-color: #ffbc43;
+          }
+
+          &,
+          .slide-image > img,
+          .slide-name,
+          .custom-line,
+          .row,
+          .row strong,
+          .row.custom-row > p,
+          .row.custom-row > a {
+            transition: 400ms;
+          }
+          & .slide-name {
+            font-size: 25px;
+            margin-top: -20px;
+            max-width: 60%;
+            text-align: center;
+            line-height: 26px;
+            color: #8d8d8d;
+            font-weight: 100;
+          }
+
+          & .custom-line {
+            width: 80%;
+            height: 1px;
+            margin: 10px 0;
+            border: 1px solid #efefef;
+          }
+          & .row {
+            width: 80%;
+            display: flex;
+            justify-content: space-evenly;
+            padding: 5px;
+            color: #aaa;
+
+            strong {
+              color: #fca60c;
+            }
+
+            &.custom-row {
+              font-weight: bold;
+              align-items: center;
+              > p {
+                color: #222;
+                font-size: 25px;
+              }
+
+              > a {
+                text-decoration: none;
+                color: #fff;
+                width: 30px;
+                height: 30px;
+                background-color: orange;
+                text-align: center;
+                line-height: 24px;
+                border-radius: 10px;
+                font-size: 20px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  .slider-btn {
+    width: 50px;
+    height: 50px;
+    border-radius: 20px;
+    border: 0;
+    background-color: #fff;
+    box-shadow: 0 0 10px #ddd;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50% + 50);
+    font-size: 16px;
+    padding-bottom: 5px;
+    cursor: pointer;
+    &:active {
+      transform: translateY(-50% + 50) scale(0.9);
+    }
+
+    &.btn-right {
+      right: 0;
+    }
+    &.btn-left {
+      left: 0;
+    }
+  }
+}
+body {
+  position: relative;
+}
+
+#slider {
+  &.subslider {
+    position: absolute;
+    top: 50%;
+    background-color: red;
+  }
+}
+.upsell-overlay {
+}
