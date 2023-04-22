@@ -13,12 +13,47 @@ class Settings {
   public array $admin_pages = array();
   public array $admin_subpages = array();
 
+  public array $settings = array();
+  public array $section = array();
+  public array $fields = array();
+
   public function register() {
 
     if (!empty($this->admin_pages) || !empty($this->admin_subpages)) {
       add_action('admin_menu', array($this, 'generateMenus'));
     }
+
+    if (!empty($this->settings)) {
+      add_action('admin_init', array($this, 'generateSettings'), 10);
+    }
   }
+
+  public function setSetting($setting) {
+    $this->settings = $setting;
+    return $this;
+  }
+
+  public function setSection($section) {
+    $this->section = $section;
+    return $this;
+  }
+
+  public function setFields($fields) {
+    $this->fields = $fields;
+    return $this;
+  }
+
+  public function generateSettings() {
+    register_setting($this->settings['option_group'], $this->settings['option_name'], isset($this->settings['callback']) ? $this->settings['callback'] : null);
+
+    add_settings_section($this->section['id'], $this->section['title'], isset($this->section['callback']) ? $this->section['callback'] : null, $this->section['page']);
+
+    foreach ($this->fields as $field) {
+      add_settings_field($field['id'], $field['title'], isset($field['callback']) ? $field['callback'] : null, $field['page'], $field['section'], isset($field['args']) ? $field['args'] : null);
+    }
+  }
+
+
 
   public function setPages(array $pages) {
     $this->admin_pages = $pages;

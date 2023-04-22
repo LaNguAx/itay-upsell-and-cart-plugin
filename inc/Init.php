@@ -8,12 +8,16 @@
 
 namespace Inc;
 
+
 final class Init {
 
   public static function get_services() {
     return [
       Pages\Dashboard::class,
-      Controllers\SettingsLinks::class
+      Controllers\SettingsLinks::class,
+      Controllers\dashboardController::class,
+      Controllers\UpsellController::class,
+      Controllers\CartController::class
     ];
   }
 

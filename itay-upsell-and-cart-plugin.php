@@ -34,13 +34,15 @@ register_deactivation_hook(__FILE__, 'deactivate_itay_plugin');
 
 include_once(ABSPATH . 'wp-admin/includes/plugin.php');
 if (is_plugin_active('woocommerce/woocommerce.php')) {
-  if (class_exists('Inc\\Init')) {
-    Inc\Init::register_services();
+  function initialize_IUCP() {
+    if (class_exists('Inc\\Init')) {
+      Inc\Init::register_services();
+    }
   }
+  add_action('woocommerce_init', 'initialize_IUCP', 10);
 } else {
   function deactivateThePlugin() {
     deactivate_plugins('/itay-upsell-and-cart-plugin/itay-upsell-and-cart-plugin.php');
-    $_GET = array();
   }
   add_action('admin_init', 'deactivateThePlugin');
 

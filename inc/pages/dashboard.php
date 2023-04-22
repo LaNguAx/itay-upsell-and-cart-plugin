@@ -10,22 +10,23 @@ namespace Inc\Pages;
 
 use Inc\Apis\Settings;
 use Inc\Callbacks\DashboardCallbacks;
+use Inc\Callbacks\TemplatesCallbacks;
 
 class Dashboard {
 
   public array $page = array();
   public array $subpages = array();
   public array $default_subpage = array();
-  public object $dashboard_callbacks;
+  public object $templates_callback;
   public object $settings_api;
 
   public  function register() {
-    $this->dashboard_callbacks = new DashboardCallbacks();
+    $this->templates_callback = new TemplatesCallbacks();
     $this->settings_api = new Settings();
 
     $this->setPage();
     $this->setDefaultSubPage();
-    $this->setSubPages();
+    // $this->setSubPages();
 
     add_action('woocommerce_product_thumbnails', function () {
       echo 'hello from dashboard.php';
@@ -42,7 +43,7 @@ class Dashboard {
         'menu_title' => 'Itay Upsell & Cart',
         'capability' => 'manage_options',
         'menu_slug' => 'itay_upsell_and_cart_plugin',
-        'callback' => array($this->dashboard_callbacks, 'generateDashboardPage'),
+        'callback' => array($this->templates_callback, 'generateDashboardPage'),
         'icon_url' => 'dashicons-smiley',
         'position' => 100,
       )
@@ -57,7 +58,7 @@ class Dashboard {
         'menu_title' => $title,
         'capability' => 'manage_options',
         'menu_slug' => 'itay_upsell_and_cart_plugin',
-        'callback' => array($this->dashboard_callbacks, 'generateDashboardPage')
+        'callback' => array($this->templates_callback, 'generateDashboardPage')
       )
     );
     $this->default_subpage = $default_subpage;
@@ -71,10 +72,9 @@ class Dashboard {
         'menu_title' => 'Upsell Manager',
         'capability' => 'manage_options',
         'menu_slug' => 'itay_upsell_manager',
-        'callback' => array($this->dashboard_callbacks, 'generateUpsellPage')
+        'callback' => array($this->templates_callback, 'generateUpsellPage')
       )
     );
-
     $this->subpages = $subpages;
   }
 }

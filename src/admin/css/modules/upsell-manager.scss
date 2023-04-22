@@ -1,5 +1,12 @@
 .wrap.upsell-manager {
-  h3 {
-    background-color: red;
+  h3.categories-selected {
+    margin-bottom: 2rem;
+    font-size: 2rem;
+  }
+  h4 {
+    font-size: 1.2rem;
+  }
+  .hidden {
+    display: none;
   }
 }
