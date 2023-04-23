@@ -33,7 +33,8 @@ class UpsellCallbacks {
           'product_name' => $product->get_name(),
           'product_price' => $product->get_price(),
           'product_image' => $product->get_image(),
-          'product_category' => $product->get_category_ids()
+          'product_category' => $product->get_category_ids(),
+          'product_type' => $product->get_type()
         );
       }
       $output[$key] = $products;

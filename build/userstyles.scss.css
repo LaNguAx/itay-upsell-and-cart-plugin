@@ -173,6 +173,10 @@
   font-weight: bold;
   margin-bottom: 0.5rem;
 }
+.glide.iucp-upsell-categories-container .product-container .product-price,
+.glide.iucp-upsell-products-container .product-container .product-price {
+  font-size: 1.2rem;
+}
 .glide.iucp-upsell-categories-container .product-container .product-button,
 .glide.iucp-upsell-products-container .product-container .product-button {
   display: block;
@@ -191,6 +195,8 @@
 
 body {
   position: relative;
+  height: 100%;
+  width: 100%;
 }
 body .iucp-upsell-overlay {
   position: absolute;
@@ -205,17 +211,28 @@ body .iucp-upsell-overlay {
 body .iucp-upsell-overlay.active {
   opacity: 0.88;
 }
-body > .glide.iucp-upsell-products-container {
-  position: absolute;
-  z-index: 999999;
+
+.iucp-products-container > .glide.iucp-upsell-products-container {
   width: 50%;
+  position: fixed;
+  top: 50%;
   left: 50%;
-  transform: translatex(-50%);
-  padding: 2rem;
-  background-color: lightblue;
+  z-index: 999999;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s;
 }
-body > .glide.iucp-upsell-products-container.hidden {
-  display: none;
+.iucp-products-container > .glide.iucp-upsell-products-container.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.glide .glide__arrow--right.iucp {
+  right: -3%;
+}
+.glide .glide__arrow--left.iucp {
+  left: -3%;
 }
 
 /*# sourceMappingURL=userstyles.scss.css.map*/

@@ -26,6 +26,9 @@
       font-weight: bold;
       margin-bottom: 0.5rem;
     }
+    .product-price {
+      font-size: 1.2rem;
+    }
     .product-button {
       display: block;
       width: 80%;
@@ -44,6 +47,8 @@
 
 body {
   position: relative;
+  height: 100%;
+  width: 100%;
   .iucp-upsell-overlay {
     position: absolute;
     top: 0;
@@ -57,18 +62,31 @@ body {
       opacity: 0.88;
     }
   }
+}
 
+.iucp-products-container {
   > .glide.iucp-upsell-products-container {
-    position: absolute;
-    z-index: 999999;
-    // background-color: red;
     width: 50%;
+    position: fixed;
+    top: 50%;
     left: 50%;
-    transform: translatex(-50%);
-    padding: 2rem;
-    background-color: lightblue;
-    &.hidden {
-      display: none;
+    z-index: 999999;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.2s;
+    &.active {
+      opacity: 1;
+      visibility: visible;
     }
+  }
+}
+
+.glide {
+  .glide__arrow--right.iucp {
+    right: -3%;
+  }
+  .glide__arrow--left.iucp {
+    left: -3%;
   }
 }

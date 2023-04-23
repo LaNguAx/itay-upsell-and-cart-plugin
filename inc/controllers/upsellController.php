@@ -52,6 +52,10 @@ class UpsellController extends BaseController {
 
       wp_enqueue_script('upsell-slider-js', $this->plugin_url . '/build/slider.js', array('jquery'), 1.0, date("h:i:s"), true);
       wp_enqueue_style('user-styles-css', $this->plugin_url . '/build/userstyles.scss.css');
+      wp_localize_script('upsell-slider-js', 'storeData', array(
+        'siteUrl' => site_url(),
+        'nonce' => wp_create_nonce('ajax-nonce')
+      ));
     }
   }
 

@@ -1,13 +1,14 @@
 import Glide from "@glidejs/glide";
-let categoryPressed;
+import "./add-to-cart.js";
 window.addEventListener("DOMContentLoaded", function (e) {
   // Categories sliders start.
-  const categorySlider = document.querySelector(
+  const mainCategorySlider = document.querySelector(
     ".glide.iucp-upsell-categories-container"
   );
-  if (categorySlider) {
-    categorySlider.addEventListener("click", function (e) {
-      e.preventDefault();
+
+  if (mainCategorySlider) {
+    mainCategorySlider.addEventListener("click", function (e) {
+      // e.preventDefault();
       handleCategorySliderClick(e);
     });
     new Glide(".glide.iucp-upsell-slider", {
@@ -22,18 +23,15 @@ window.addEventListener("DOMContentLoaded", function (e) {
   const productsSliders = document.querySelectorAll(
     ".glide.iucp-upsell-products-container"
   );
+  const productsSlidersContainer = document.querySelector(
+    ".icup-products-container"
+  );
+  document.body.append(productsSlidersContainer);
   if (productsSliders) {
     productsSliders.forEach((slider) => {
-      slider.addEventListener("click", function (e) {
-        e.preventDefault();
-      });
-      document.body.append(slider);
-      // slider.classList.add(sliderName, "hidden");
+      const sliderName = slider.getAttribute("id").split("-").slice(-1)[0];
 
-      const sliderName = slider.querySelector(".glide.iucp-upsell-slider")
-        .classList[2];
-
-      const glide = new Glide(`.glide.iucp-upsell-slider.${sliderName}`, {
+      new Glide(`.glide.iucp-upsell-slider.${sliderName}`, {
         type: "carousel",
         perView: 4,
         gap: 15,
@@ -48,14 +46,16 @@ function handleCategorySliderClick(e) {
   if (!target) return;
 
   const clickedCategory = target.querySelector("a").getAttribute("href");
-  categoryPressed = true;
   showClickedCategory(clickedCategory.slice(1));
-  return;
 }
 
-function showClickedCategory(categoryName) {
-  if (!categoryPressed) return;
+function showClickedCategory(sliderName) {
+  // if (!categoryPressed) return;
   generateOverlay();
+  const clickedSlider = document.querySelector(
+    `#iucp-upsell-products-container-${sliderName}`
+  );
+  clickedSlider.classList.add("active");
 }
 
 function generateOverlay() {
@@ -74,6 +74,7 @@ function generateOverlay() {
       overlay.remove();
     }, 200);
     toggleOverflow(false);
+    hideAllProductSliders();
   });
 }
 
@@ -84,4 +85,11 @@ function toggleOverflow(state) {
   }
   document.body.style.overflow = "auto";
   return;
+}
+
+function hideAllProductSliders() {
+  const productsSliders = document.querySelectorAll(
+    ".glide.iucp-upsell-products-container"
+  );
+  productsSliders.forEach((slider) => slider.classList.remove("active"));
 }

@@ -45,6 +45,7 @@
                     <div class="product-attributes">
                       <p class="product-name"><?php echo $product['product_name'] ?></p>
                       <p class="product-price"><?php echo $product['product_price']  ?><span>$</span></p>
+                      <p><?php echo ($product['product_type'] == 'grouped' ? 'Grouped Products' : 'Single Product') ?></p>
                     </div>
 
                   </div>

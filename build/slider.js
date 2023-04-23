@@ -1,6 +1,43 @@
 /******/ (function() { // webpackBootstrap
-/******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
+
+/***/ "./src/user/js/add-to-cart.js":
+/*!************************************!*\
+  !*** ./src/user/js/add-to-cart.js ***!
+  \************************************/
+/***/ (function() {
+
+window.addEventListener("DOMContentLoaded", () => {
+  const productsContainer = document.querySelector(".iucp-products-container");
+  productsContainer.addEventListener("click", function (e) {
+    e.preventDefault();
+    const target = e.target.closest(".product-button");
+    if (!target) return;
+    addProductToCart(target.dataset.productId);
+  });
+});
+async function addProductToCart(productID) {
+  try {
+    console.log(storeData.nonce);
+    // const cartResponse = await fetch(
+    //   `${storeData.siteUrl}/wp-json/wc/store/v1/cart/add-item`,
+    //   {
+    //     method: "POST",
+    //     credentials: "same-origin",
+    //     headers: {
+    //       "X-WP-Nonce": storeData.nonce,
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify(productID),
+    //   }
+    // );
+    const cartResponse = await fetch(`${storeData.siteUrl}/wp-json/wc/store/v1/cart`);
+    const res = await cartResponse.json();
+    console.log(res);
+  } catch (error) {}
+}
+
+/***/ }),
 
 /***/ "./node_modules/@glidejs/glide/dist/glide.esm.js":
 /*!*******************************************************!*\
@@ -8,6 +45,7 @@
   \*******************************************************/
 /***/ (function(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
+"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": function() { return /* binding */ Glide; }
@@ -3919,6 +3957,18 @@ var Glide = /*#__PURE__*/function (_Core) {
 /******/ 	}
 /******/ 	
 /************************************************************************/
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	!function() {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__webpack_require__.n = function(module) {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				function() { return module['default']; } :
+/******/ 				function() { return module; };
+/******/ 			__webpack_require__.d(getter, { a: getter });
+/******/ 			return getter;
+/******/ 		};
+/******/ 	}();
+/******/ 	
 /******/ 	/* webpack/runtime/define property getters */
 /******/ 	!function() {
 /******/ 		// define getter functions for harmony exports
@@ -3949,21 +3999,24 @@ var Glide = /*#__PURE__*/function (_Core) {
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
+// This entry need to be wrapped in an IIFE because it need to be in strict mode.
 !function() {
+"use strict";
 /*!*******************************!*\
   !*** ./src/user/js/slider.js ***!
   \*******************************/
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _glidejs_glide__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @glidejs/glide */ "./node_modules/@glidejs/glide/dist/glide.esm.js");
+/* harmony import */ var _add_to_cart_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./add-to-cart.js */ "./src/user/js/add-to-cart.js");
+/* harmony import */ var _add_to_cart_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_add_to_cart_js__WEBPACK_IMPORTED_MODULE_1__);
 
-let categoryPressed;
+
 window.addEventListener("DOMContentLoaded", function (e) {
   // Categories sliders start.
-  const categorySlider = document.querySelector(".glide.iucp-upsell-categories-container");
-  if (categorySlider) {
-    categorySlider.addEventListener("click", function (e) {
-      e.preventDefault();
+  const mainCategorySlider = document.querySelector(".glide.iucp-upsell-categories-container");
+  if (mainCategorySlider) {
+    mainCategorySlider.addEventListener("click", function (e) {
+      // e.preventDefault();
       handleCategorySliderClick(e);
     });
     new _glidejs_glide__WEBPACK_IMPORTED_MODULE_0__["default"](".glide.iucp-upsell-slider", {
@@ -3976,16 +4029,12 @@ window.addEventListener("DOMContentLoaded", function (e) {
 
   //Products sliders start
   const productsSliders = document.querySelectorAll(".glide.iucp-upsell-products-container");
+  const productsSlidersContainer = document.querySelector(".icup-products-container");
+  document.body.append(productsSlidersContainer);
   if (productsSliders) {
     productsSliders.forEach(slider => {
-      slider.addEventListener("click", function (e) {
-        e.preventDefault();
-      });
-      document.body.append(slider);
-      // slider.classList.add(sliderName, "hidden");
-
-      const sliderName = slider.querySelector(".glide.iucp-upsell-slider").classList[2];
-      const glide = new _glidejs_glide__WEBPACK_IMPORTED_MODULE_0__["default"](`.glide.iucp-upsell-slider.${sliderName}`, {
+      const sliderName = slider.getAttribute("id").split("-").slice(-1)[0];
+      new _glidejs_glide__WEBPACK_IMPORTED_MODULE_0__["default"](`.glide.iucp-upsell-slider.${sliderName}`, {
         type: "carousel",
         perView: 4,
         gap: 15
@@ -3999,13 +4048,13 @@ function handleCategorySliderClick(e) {
   const target = e.target.closest("li");
   if (!target) return;
   const clickedCategory = target.querySelector("a").getAttribute("href");
-  categoryPressed = true;
   showClickedCategory(clickedCategory.slice(1));
-  return;
 }
-function showClickedCategory(categoryName) {
-  if (!categoryPressed) return;
+function showClickedCategory(sliderName) {
+  // if (!categoryPressed) return;
   generateOverlay();
+  const clickedSlider = document.querySelector(`#iucp-upsell-products-container-${sliderName}`);
+  clickedSlider.classList.add("active");
 }
 function generateOverlay() {
   const overlay = document.createElement("div");
@@ -4021,6 +4070,7 @@ function generateOverlay() {
       overlay.remove();
     }, 200);
     toggleOverflow(false);
+    hideAllProductSliders();
   });
 }
 function toggleOverflow(state) {
@@ -4030,6 +4080,10 @@ function toggleOverflow(state) {
   }
   document.body.style.overflow = "auto";
   return;
+}
+function hideAllProductSliders() {
+  const productsSliders = document.querySelectorAll(".glide.iucp-upsell-products-container");
+  productsSliders.forEach(slider => slider.classList.remove("active"));
 }
 }();
 /******/ })()
