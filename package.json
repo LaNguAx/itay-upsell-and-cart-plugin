@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/LaNguAx/itay-upsell-and-cart-plugin#readme",
   "dependencies": {
+    "@glidejs/glide": "^3.6.0",
     "@wordpress/scripts": "^26.2.0"
   }
 }

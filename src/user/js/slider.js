@@ -1,91 +1,87 @@
-import $ from "jquery";
+import Glide from "@glidejs/glide";
+let categoryPressed;
 window.addEventListener("DOMContentLoaded", function (e) {
-  $(function () {
-    const slider = document.getElementsByClassName("slider").item(0);
-
-    let isDrag = false,
-      startPos = 0,
-      curIndex = 0,
-      curTranslate = 0,
-      preTranslate = 0,
-      animationId = null;
-
-    $(".slider-item").on("mousedown mousemove mouseup mouseleave", (e) => {
+  // Categories sliders start.
+  const categorySlider = document.querySelector(
+    ".glide.iucp-upsell-categories-container"
+  );
+  if (categorySlider) {
+    categorySlider.addEventListener("click", function (e) {
       e.preventDefault();
+      handleCategorySliderClick(e);
     });
+    new Glide(".glide.iucp-upsell-slider", {
+      type: "carousel",
+      perView: 4,
+      gap: 15,
+    }).mount();
+  }
+  // Categories slider end.
 
-    slider.onmousedown = startSlide;
-    slider.ontouchstart = startSlide;
-    slider.onmousemove = moveSlide;
-    slider.ontouchmove = moveSlide;
-    slider.onmouseup = endSlide;
-    slider.onmouseleave = endSlide;
-    slider.ontouchend = endSlide;
+  //Products sliders start
+  const productsSliders = document.querySelectorAll(
+    ".glide.iucp-upsell-products-container"
+  );
+  if (productsSliders) {
+    productsSliders.forEach((slider) => {
+      slider.addEventListener("click", function (e) {
+        e.preventDefault();
+      });
+      document.body.append(slider);
+      // slider.classList.add(sliderName, "hidden");
 
-    function getPositionX(event) {
-      return event.type.includes("mouse")
-        ? event.pageX
-        : event.touches[0].clientX;
-    }
-    function animation() {
-      if (isDrag) requestAnimationFrame(animation);
-      setSliderPosition();
-    }
-    function startSlide(event) {
-      startPos = getPositionX(event);
-      isDrag = true;
-      animationId = requestAnimationFrame(animation);
-      $(".slider").removeClass("animation").css("cursor", "grabbing");
-    }
-    function moveSlide() {
-      if (isDrag) {
-        const positionX = getPositionX(event);
-        curTranslate = preTranslate + positionX - startPos;
-      }
-    }
-    function endSlide() {
-      isDrag = false;
-      cancelAnimationFrame(animation);
-      const Moved = curTranslate - preTranslate;
-      if (Moved < -100 && curIndex < $(".slider-item").length - 1 - 2)
-        curIndex++;
-      if (Moved > 100 && curIndex > 0) curIndex--;
-      setPositionByIndex();
-      $(".slider").addClass("animation").css("cursor", "grab");
-    }
-    function setPositionByIndex() {
-      curTranslate = ($(".slider-item").width() + 40) * curIndex * -1;
-      preTranslate = curTranslate;
-      setSliderPosition();
-    }
-    function setSliderPosition() {
-      $(".slider-container .slider").css(
-        "transform",
-        `translateX(${curTranslate}px)`
-      );
-    }
-    $(".btn-right").click(() => {
-      curIndex =
-        ++curIndex < $(".slider-item").length - 1 - 2
-          ? curIndex
-          : $(".slider-item").length - 1 - 2;
-      endSlide();
+      const sliderName = slider.querySelector(".glide.iucp-upsell-slider")
+        .classList[2];
+
+      const glide = new Glide(`.glide.iucp-upsell-slider.${sliderName}`, {
+        type: "carousel",
+        perView: 4,
+        gap: 15,
+      }).mount();
     });
-    $(".btn-left").click(() => {
-      curIndex = --curIndex > 0 ? curIndex : 0;
-      endSlide();
-    });
-  });
-
-  window.addEventListener("hashchange", function (e) {
-    const newHash = window.location.hash;
-    const overlay = document.querySelector(".upsell-overlay");
-    const slider = document.querySelector(
-      `.${newHash.slice(1)}.subslider.hidden`
-    );
-    slider.classList.remove("hidden");
-
-    document.body.style.height = "100%";
-    document.body.style.overflow = "hidden";
-  });
+  }
+  // Products sliders end
 });
+
+function handleCategorySliderClick(e) {
+  const target = e.target.closest("li");
+  if (!target) return;
+
+  const clickedCategory = target.querySelector("a").getAttribute("href");
+  categoryPressed = true;
+  showClickedCategory(clickedCategory.slice(1));
+  return;
+}
+
+function showClickedCategory(categoryName) {
+  if (!categoryPressed) return;
+  generateOverlay();
+}
+
+function generateOverlay() {
+  const overlay = document.createElement("div");
+  overlay.classList.add("iucp-upsell-overlay");
+  document.body.appendChild(overlay);
+
+  setTimeout(() => {
+    overlay.classList.add("active");
+  }, 50);
+  toggleOverflow(true);
+
+  overlay.addEventListener("click", function (e) {
+    overlay.classList.remove("active");
+    setTimeout(() => {
+      overlay.remove();
+    }, 200);
+    toggleOverflow(false);
+  });
+}
+
+function toggleOverflow(state) {
+  if (state) {
+    document.body.style.overflow = "hidden";
+    return;
+  }
+  document.body.style.overflow = "auto";
+  return;
+}
