@@ -9,32 +9,81 @@
 
 window.addEventListener("DOMContentLoaded", () => {
   const productsContainer = document.querySelector(".iucp-products-container");
-  productsContainer.addEventListener("click", function (e) {
-    e.preventDefault();
-    const target = e.target.closest(".product-button");
-    if (!target) return;
-    addProductToCart(target.dataset.productId);
+  productsContainer.addEventListener("click", async function (e) {
+    try {
+      e.preventDefault();
+      const target = e.target.closest(".product-button");
+      if (!target) return;
+      if (target.dataset.productType == "grouped") {
+        const groupedProducts = target.querySelector("a").href;
+        window.location.href = groupedProducts;
+        return;
+      }
+
+      // const check = await fetch(
+      //   `${storeData.siteUrl}/wp-json/wc/store/v1/cart`
+      // );
+      // const data = await check.json();
+      // console.log(data);
+      showSpinner(target);
+      const response = await addProductToCart(target.dataset.productId, target);
+      showSpinner(target);
+      showSuccessMessage(target);
+    } catch (error) {
+      console.log(error);
+    }
   });
 });
-async function addProductToCart(productID) {
+async function addProductToCart(productID, target) {
   try {
-    console.log(storeData.nonce);
-    // const cartResponse = await fetch(
-    //   `${storeData.siteUrl}/wp-json/wc/store/v1/cart/add-item`,
-    //   {
-    //     method: "POST",
-    //     credentials: "same-origin",
-    //     headers: {
-    //       "X-WP-Nonce": storeData.nonce,
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify(productID),
-    //   }
-    // );
-    const cartResponse = await fetch(`${storeData.siteUrl}/wp-json/wc/store/v1/cart`);
+    const product = {
+      id: productID,
+      quantity: 1,
+      variation: undefined
+    };
+    const productVariation = target.querySelector("pre") ? JSON.parse(target.querySelector("pre").textContent) : undefined;
+    if (productVariation) {
+      let newVariation = [];
+      for (const [key, val] of Object.entries(productVariation)) {
+        newVariation.push({
+          attribute: key,
+          value: val
+        });
+      }
+      product.variation = newVariation;
+    }
+    console.log(product);
+    const fetchUrl = `${storeData.siteUrl}/wp-json/wc/store/v1/cart/add-item`;
+    const cartResponse = await fetch(fetchUrl, {
+      method: "POST",
+      credentials: "same-origin",
+      headers: {
+        "X-WC-Store-API-Nonce": storeData.nonce,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(product)
+    });
+    if (!cartResponse.ok) return console.log(cartResponse);
     const res = await cartResponse.json();
     console.log(res);
-  } catch (error) {}
+  } catch (error) {
+    throw error;
+    console.log(error);
+  }
+}
+function showSpinner(target) {
+  const productButton = target;
+  productButton.querySelector("a").classList.toggle("hidden");
+  productButton.querySelector(".lds-dual-ring").classList.toggle("hidden");
+}
+function showSuccessMessage(target) {
+  const productButton = target;
+  productButton.querySelector("a").classList.toggle("hidden");
+  productButton.querySelector(".add-to-cart-success").classList.toggle("hidden");
+  setTimeout(() => {
+    productButton.querySelector("a").classList.toggle("hidden");
+    productButton.querySelector(".add-to-cart-success").classList.toggle("hidden");
+  }, 1000);
 }
 
 /***/ }),
@@ -4033,7 +4082,8 @@ window.addEventListener("DOMContentLoaded", function (e) {
   document.body.append(productsSlidersContainer);
   if (productsSliders) {
     productsSliders.forEach(slider => {
-      const sliderName = slider.getAttribute("id").split("-").slice(-1)[0];
+      const sliderName = slider.getAttribute("id").split("_").slice(1)[0];
+      console.log(sliderName);
       new _glidejs_glide__WEBPACK_IMPORTED_MODULE_0__["default"](`.glide.iucp-upsell-slider.${sliderName}`, {
         type: "carousel",
         perView: 4,
@@ -4053,7 +4103,7 @@ function handleCategorySliderClick(e) {
 function showClickedCategory(sliderName) {
   // if (!categoryPressed) return;
   generateOverlay();
-  const clickedSlider = document.querySelector(`#iucp-upsell-products-container-${sliderName}`);
+  const clickedSlider = document.querySelector(`#iucp-upsell-products-container_${sliderName}`);
   clickedSlider.classList.add("active");
 }
 function generateOverlay() {

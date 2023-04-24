@@ -7,6 +7,7 @@
   margin: auto;
   margin-bottom: 2rem;
   .product-container {
+    height: auto;
     * {
       margin: 0;
       padding: 0;
@@ -30,16 +31,24 @@
       font-size: 1.2rem;
     }
     .product-button {
-      display: block;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       width: 80%;
+      height: 40px;
       margin: auto;
       background-color: lightblue;
       border-radius: 1rem;
       a {
         color: #fff;
-        display: inline-block;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         width: 100%;
         outline: none;
+        &.hidden {
+          display: none;
+        }
       }
     }
   }
@@ -89,4 +98,34 @@ body {
   .glide__arrow--left.iucp {
     left: -3%;
   }
+}
+
+.lds-dual-ring {
+  display: inline-block;
+  &.hidden {
+    display: none;
+  }
+}
+.lds-dual-ring:after {
+  content: " ";
+  display: block;
+  width: 1.3rem;
+  height: 1.3rem;
+  margin: 8px;
+  border-radius: 50%;
+  border: 6px solid #fff;
+  border-color: #fff transparent #fff transparent;
+  animation: lds-dual-ring 1.2s linear infinite;
+}
+@keyframes lds-dual-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.hidden {
+  display: none;
 }

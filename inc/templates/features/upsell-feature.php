@@ -42,20 +42,33 @@ if (!$iucp_upsell_products) return;
   <?php
   foreach ($products_within_categories as $category => $products) {
   ?>
-    <div id="iucp-upsell-products-container-<?php echo $category ?>" class="glide iucp-upsell-products-container">
+    <div id="iucp-upsell-products-container_<?php echo $category ?>" class="glide iucp-upsell-products-container">
       <div class="glide iucp-upsell-slider <?php echo $category ?>">
         <div class="glide__track" data-glide-el="track">
           <ul class="glide__slides">
             <?php
             foreach ($products as $product) {
               $current_product = wc_get_product($product);
+              $current_product_attr = $current_product->get_default_attributes();
             ?>
               <li id="<?php echo $category ?>" class="glide__slide">
                 <form class="product-container">
                   <div class="product-image"><?php echo $current_product->get_image() ?></div>
                   <p class="product-name"><?php echo $current_product->get_name() ?></p>
                   <p class="product-price"><?php echo $current_product->get_price() . get_woocommerce_currency_symbol() ?></p>
-                  <span class="product-button" data-product-id="<?php echo $current_product->get_id() ?>"><a href="<?php echo $current_product->add_to_cart_url() ?>"><?php echo ($current_product->is_type('grouped') ? 'View Products' : 'Add To Cart') ?></a></span>
+                  <span class="product-button" data-product-type="<?php echo $current_product->get_type() ?>" data-product-id="<?php echo $current_product->get_id() ?>">
+                    <?php
+                    if ($current_product->is_type('variable')) {
+                    ?>
+
+                      <pre id="product-attributes" class="hidden"><?php echo json_encode($current_product_attr) ?></pre>
+                    <?php
+                    }
+                    ?>
+                    <a href="<?php echo $current_product->add_to_cart_url() ?>"><?php echo ($current_product->is_type('grouped') ? 'View Products' : 'Add To Cart') ?></a>
+                    <span class="lds-dual-ring hidden"></span>
+                    <span class="add-to-cart-success hidden">Item Added To Cart!</span>
+                  </span>
                 </form>
               </li>
 

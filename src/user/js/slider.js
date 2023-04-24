@@ -29,8 +29,8 @@ window.addEventListener("DOMContentLoaded", function (e) {
   document.body.append(productsSlidersContainer);
   if (productsSliders) {
     productsSliders.forEach((slider) => {
-      const sliderName = slider.getAttribute("id").split("-").slice(-1)[0];
-
+      const sliderName = slider.getAttribute("id").split("_").slice(1)[0];
+      console.log(sliderName);
       new Glide(`.glide.iucp-upsell-slider.${sliderName}`, {
         type: "carousel",
         perView: 4,
@@ -53,7 +53,7 @@ function showClickedCategory(sliderName) {
   // if (!categoryPressed) return;
   generateOverlay();
   const clickedSlider = document.querySelector(
-    `#iucp-upsell-products-container-${sliderName}`
+    `#iucp-upsell-products-container_${sliderName}`
   );
   clickedSlider.classList.add("active");
 }

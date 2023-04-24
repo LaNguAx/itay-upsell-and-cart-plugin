@@ -28,8 +28,6 @@ class Dashboard {
     $this->setDefaultSubPage();
     // $this->setSubPages();
 
-
-
     $this->settings_api->setPages($this->page)->withSubPage($this->default_subpage)->setSubPages($this->subpages)->register();
   }
 
