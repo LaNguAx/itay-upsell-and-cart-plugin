@@ -14,32 +14,23 @@ class UpsellCallbacks {
 
   public function validateData($input_data) {
 
-    $output = array();
+    $output = get_option('iucp_upsell_manager_categories', array());
     if (isset($_POST['update_products'])) {
-      $output = get_option('iucp_upsell_manager_setting');
-      update_option('iucp_upsell_products', $_POST['upsell_products']);
+      $new_products = array();
+      foreach ($_POST['new_products'] as $category => $products) {
+        foreach ($products as $product) {
+          print('<pre>' . print_r($product, true) . '</pre>');
+          die();
+          $new_products[$category] = json_decode($product, true);
+        }
+      }
+      print('<pre>' . print_r($new_products, true) . '</pre>');
+      die();
+      update_option('iucp_upsell_products', $new_products);
       return $output;
     }
-    foreach ($input_data as $key => $value) {
-      $products_from_cat =  wc_get_products(
-        array(
-          'category' => $key
-        )
-      );
-      $products = array();
-      foreach ($products_from_cat as $product) {
-        $products[] = array(
-          'product_id' => $product->get_id(),
-          'product_name' => $product->get_name(),
-          'product_price' => $product->get_price(),
-          'product_image' => $product->get_image(),
-          'product_category' => $product->get_category_ids(),
-          'product_type' => $product->get_type()
-        );
-      }
-      $output[$key] = $products;
-    }
     update_option('iucp_upsell_products', array());
+    if (isset($input_data)) $output = $input_data;
     return $output;
   }
   public function sectionManager() {
@@ -54,11 +45,10 @@ class UpsellCallbacks {
     $category_name = $args['category_name'];
     $category_slug = $args['category_slug'];
     $option_data = get_option($option_name);
-
     $checked = isset($option_data[$category_slug]) ? 'checked' : '';
   ?>
     <div class="<?php echo $args['class'] ?>">
-      <input type="checkbox" id="<?php echo $option_name . '[' . $category_slug . ']' ?>" value="1" name="<?php echo $option_name . '[' . $category_slug . ']' ?>" <?php echo $checked ?>><label for="<?php echo $option_name . '[' . $category_slug . ']' ?>">
+      <input type="checkbox" id="<?php echo $option_name . '[' . $category_slug . ']' ?>" value="<?php echo $args['term_taxonomy_id'] ?>" name="<?php echo $option_name . '[' . $category_slug . ']' ?>" <?php echo $checked ?>><label for="<?php echo $option_name . '[' . $category_slug . ']' ?>">
         <div>
         </div>
       </label>

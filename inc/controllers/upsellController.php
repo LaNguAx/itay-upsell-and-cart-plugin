@@ -8,13 +8,10 @@
 
 namespace Inc\Controllers;
 
-use Automattic\WooCommerce\Admin\API\Data;
-use Automattic\WooCommerce\Admin\Features\Navigation\Screen;
 use Inc\Apis\Settings;
 use Inc\Controllers\BaseController;
 use Inc\Callbacks\TemplatesCallbacks;
 use Inc\Callbacks\UpsellCallbacks;
-use WP_Query;
 
 class UpsellController extends BaseController {
 
@@ -77,7 +74,7 @@ class UpsellController extends BaseController {
   public function setSetting() {
     $setting = array(
       'option_group' => 'iucp_upsell_manager_settings',
-      'option_name' => 'iucp_upsell_manager_setting',
+      'option_name' => 'iucp_upsell_manager_categories',
       'callback' => array($this->upsell_callbacks, 'validateData')
     );
     $this->settings->setSetting($setting);
@@ -101,7 +98,7 @@ class UpsellController extends BaseController {
         'page' => 'itay_upsell_manager',
         'section' => 'iucp_upsell_manager_index',
         'args' => array(
-          'option_name' => 'iucp_upsell_manager_setting',
+          'option_name' => 'iucp_upsell_manager_categories',
           'feature_name' => 'iucp_category',
           'category_slug' => $category['slug'],
           'category_name' => $category['name'],

@@ -16,8 +16,8 @@ class Activate {
     if (!get_option('iucp_dashboard_setting')) {
       update_option('iucp_dashboard_setting', $defaults);
     }
-    if (!get_option('iucp_upsell_manager_setting')) {
-      update_option('iucp_upsell_manager_setting', $defaults);
+    if (!get_option('iucp_upsell_manager_categories')) {
+      update_option('iucp_upsell_manager_categories', $defaults);
     }
     if (!get_option('iucp_upsell_products')) {
       update_option('iucp_upsell_products', $defaults);
