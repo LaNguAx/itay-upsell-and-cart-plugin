@@ -7,7 +7,12 @@ foreach ($iucp_upsell_products as $category => $product) {
   $product_categories[] = $category;
   $products_within_categories[$category] = $product;
 }
+// print('<pre>' . print_r($product_categories, true) . '</pre>');
+// print('<pre>' . print_r($products_within_categories, true) . '</pre>');
+// die();
 if (!$iucp_upsell_products) return;
+print('<pre>' . print_r($product_categories, true) . '</pre>');
+die();
 ?>
 <div class="iucp-category-container">
   <div id="iucp-upsell-main-category-container" class="glide iucp-upsell-categories-container">
@@ -16,8 +21,9 @@ if (!$iucp_upsell_products) return;
         <ul class="glide__slides">
           <?php
           foreach ($product_categories as $category) {
-            $first_product = reset($products_within_categories[$category]);
+            $first_product = array_key_first($products_within_categories[$category]);
             $first_product_data = wc_get_product($first_product);
+            print('<pre>' . print_r($category, true) . '</pre>');
           ?>
             <li id="<?php echo $category ?>" class="glide__slide">
               <div class="product-container">
@@ -47,9 +53,9 @@ if (!$iucp_upsell_products) return;
         <div class="glide__track" data-glide-el="track">
           <ul class="glide__slides">
             <?php
-            foreach ($products as $product) {
-              $current_product = wc_get_product($product);
-              $current_product_attr = $current_product->get_default_attributes();
+            foreach ($products as $product_id => $product) {
+              $current_product = wc_get_product($product_id);
+              // if (!$current_product->is_type('variable')) {
             ?>
               <li id="<?php echo $category ?>" class="glide__slide">
                 <form class="product-container">
@@ -57,14 +63,6 @@ if (!$iucp_upsell_products) return;
                   <p class="product-name"><?php echo $current_product->get_name() ?></p>
                   <p class="product-price"><?php echo $current_product->get_price() . get_woocommerce_currency_symbol() ?></p>
                   <span class="product-button" data-product-type="<?php echo $current_product->get_type() ?>" data-product-id="<?php echo $current_product->get_id() ?>">
-                    <?php
-                    if ($current_product->is_type('variable')) {
-                    ?>
-
-                      <pre id="product-attributes" class="hidden"><?php echo json_encode($current_product_attr) ?></pre>
-                    <?php
-                    }
-                    ?>
                     <a href="<?php echo $current_product->add_to_cart_url() ?>"><?php echo ($current_product->is_type('grouped') ? 'View Products' : 'Add To Cart') ?></a>
                     <span class="lds-dual-ring hidden"></span>
                     <span class="add-to-cart-success hidden">Item Added To Cart!</span>

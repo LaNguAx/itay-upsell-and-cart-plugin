@@ -1,4 +1,4 @@
-window.addEventListener("DOMContentLoaded", function () {
+window.addEventListener("DOMContentLoaded", () => {
   const navTabContainer = document.querySelector(".nav.nav-tabs");
   if (navTabContainer) {
     navTabContainer.addEventListener("click", function (e) {
@@ -17,5 +17,24 @@ window.addEventListener("DOMContentLoaded", function () {
       target.classList.add("active");
       clickedTab.classList.add("active");
     });
+    // Navigation tabs end
+
+    // Validate checked inputs to send to db.
+    const productsContainer = document.querySelector(
+      ".wrap.upsell-products-container"
+    );
+    productsContainer.addEventListener("click", function (e) {
+      console.log(e.target);
+      const target = e.target.closest(".product-image");
+      if (!target) return;
+      manipulateClickedProductInputs(target);
+    });
   }
 });
+
+function manipulateClickedProductInputs(target) {
+  const inputs = target.querySelectorAll(".product-variation-attributes");
+  inputs.forEach((input) => {
+    input.type = input.type === "checkbox" ? "hidden" : "checkbox";
+  });
+}

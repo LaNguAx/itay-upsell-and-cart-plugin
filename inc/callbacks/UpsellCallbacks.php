@@ -18,19 +18,17 @@ class UpsellCallbacks {
     if (isset($_POST['update_products'])) {
       $new_products = array();
       foreach ($_POST['new_products'] as $category => $products) {
-        foreach ($products as $product) {
-          print('<pre>' . print_r($product, true) . '</pre>');
-          die();
-          $new_products[$category] = json_decode($product, true);
+        foreach ($products as $id => $product) {
+          if (!isset($product['product_name'])) continue;
+          $new_products[$category][$id] =
+            $product;
         }
       }
-      print('<pre>' . print_r($new_products, true) . '</pre>');
-      die();
       update_option('iucp_upsell_products', $new_products);
       return $output;
     }
     update_option('iucp_upsell_products', array());
-    if (isset($input_data)) $output = $input_data;
+    $output = $input_data;
     return $output;
   }
   public function sectionManager() {

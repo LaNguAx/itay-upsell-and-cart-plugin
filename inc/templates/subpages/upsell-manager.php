@@ -44,27 +44,38 @@
                   $product_data = array(
                     'product_name' => $product->get_name(),
                     'product_type' => $product->get_type(),
-                    'product_variation' => $product->is_type('variable') ? new WC_Product_Variation($product->get_id()) : null
+                    'product_variations' => $product->is_type('variable') ? $product->get_variation_attributes() : null
                   );
-
-                  if (!is_null($product_data['product_variation'])) {
-                    print('<pre>' . print_r($product_data['product_variation'], true) . '</pre>');
-                    die();
-                    foreach ($product_data['product_variation'] as $variation_name => $variations) {
+                  if (!is_null($product_data['product_variations'])) {
+                    foreach ($product_data['product_variations'] as $variation_name => $variations) {
                       foreach ($variations as $variation) {
-                        $product_data['product_variation'] = array($variation_name => $variation);
-                        $product_data['product_price'] = $product->get_variation_prices()
-                        // fix here
+                        $product_data['product_variations'] = array($variation_name => $variation);
+                        // print('<pre>' . print_r($product_data, true) . '</pre>');
+                        $checkedVariation;
+                        // FIX HERE WHEN LOADING THE PAGE IT DOESNT RENDER CORRECTLY THE CHECKED FOR THE CHECKBOXES!! BECAUSE YOU HAVE MULTIPLE CHECKBOXES FOR EACH ITEM AND YOU JUST CHECK WETHER OR NOT THAT ITEMS EXIST AND YOU SHOULD CHECK FOR WETHER VARIATION EXISTS!!!
+                        if ($checked) {
+                          // print('<pre>' . print_r($products_found, true) . '</pre>');
+                          // die();
+                          $checkedVariation = isset($products_found[$category_name][$product->get_id()]['product_variations'][$variation_name][$variation]);
+                          print('<pre>' . print_r($products_found[$category_name][$product->get_id()]['product_variations'][$variation_name], true) . '</pre>');
+                          die();
+                        }
                 ?>
                         <div class="product-container">
                           <div class="product-image">
-                            <input type="checkbox" class="product-name" id="product-id" name="<?php echo 'new_products[' . $category_name . '][' . $product->get_id() . ']' ?>" value="<?php echo esc_attr(json_encode($product_data)) ?>" <?php echo ($checked ? 'checked' : '')  ?>>
+                            <input type="checkbox" class="product-name" id="product-id" name="<?php echo 'new_products[' . $category_name . '][' . $product->get_id() . '][product_name]' ?>" value="<?php echo $product_data['product_name'] ?>" <?php echo ($checked ? 'checked' : '')  ?>>
                             <label for="product-id"><?php echo $product->get_image()  ?></label>
+
+                            <div class="product-variations hidden">
+                              <input class="product-variation-attributes" type="<?php echo ($checked ? 'hidden' : 'checkbox')  ?>" name="<?php echo 'new_products[' . $category_name . '][' . $product->get_id() . '][product_type]' ?>" value="<?php echo $product_data['product_type'] ?>">
+
+                              <input class="product-variation-attributes" type="<?php echo ($checked ? 'hidden' : 'checkbox')  ?>" name="<?php echo 'new_products[' . $category_name . '][' . $product->get_id() . '][product_variations][' . $variation_name . '][]' ?>" value="<?php echo $product_data['product_variations'][$variation_name] ?>">
+                            </div>
                           </div>
                           <div class="product-attributes">
                             <p class="product-name"><?php echo $product->get_name()  ?></p>
                             <p class="product-price"><?php echo $product->get_price() ?><span>$</span></p>
-                            <p><?php  ?></p>
+                            <p><?php echo $product->get_type()  ?></p>
                             <p><?php echo $variation ?></p>
                           </div>
                         </div>
@@ -75,13 +86,13 @@
                     ?>
                     <div class="product-container">
                       <div class="product-image">
-                        <input type="checkbox" class="product-name" id="product-id" name="<?php echo 'new_products[' . $category_name . '][' . $product->get_id() . ']'  ?>" value="1" <?php echo ($checked ? 'checked' : '')  ?>>
+                        <input type="checkbox" class="product-name" id="product-id" name="<?php echo 'new_products[' . $category_name . '][' . $product->get_id() . ']'  ?>" value="<?php echo $product->get_name() ?>" <?php echo ($checked ? 'checked' : '')  ?>>
                         <label for="product-id"><?php echo $product->get_image()  ?></label>
                       </div>
                       <div class="product-attributes">
                         <p class="product-name"><?php echo $product->get_name()  ?></p>
                         <p class="product-price"><?php echo $product->get_price() ?><span>$</span></p>
-                        <p><?php  ?></p>
+                        <p><?php echo $product->get_type() ?></p>
                       </div>
 
                     </div>
