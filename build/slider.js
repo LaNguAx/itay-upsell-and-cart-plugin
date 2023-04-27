@@ -41,7 +41,8 @@ async function addProductToCart(productID, target) {
       quantity: 1,
       variation: undefined
     };
-    const productVariation = target.querySelector("pre") ? JSON.parse(target.querySelector("pre").textContent) : undefined;
+    console.log(target);
+    const productVariation = target.querySelector("#product-attributes") ? JSON.parse(target.querySelector("#product-attributes").value) : undefined;
     if (productVariation) {
       let newVariation = [];
       for (const [key, val] of Object.entries(productVariation)) {
@@ -52,7 +53,6 @@ async function addProductToCart(productID, target) {
       }
       product.variation = newVariation;
     }
-    console.log(product);
     const fetchUrl = `${storeData.siteUrl}/wp-json/wc/store/v1/cart/add-item`;
     const cartResponse = await fetch(fetchUrl, {
       method: "POST",
@@ -4083,7 +4083,6 @@ window.addEventListener("DOMContentLoaded", function (e) {
   if (productsSliders) {
     productsSliders.forEach(slider => {
       const sliderName = slider.getAttribute("id").split("_").slice(1)[0];
-      console.log(sliderName);
       new _glidejs_glide__WEBPACK_IMPORTED_MODULE_0__["default"](`.glide.iucp-upsell-slider.${sliderName}`, {
         type: "carousel",
         perView: 4,

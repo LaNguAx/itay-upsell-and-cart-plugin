@@ -17,9 +17,10 @@ class UpsellCallbacks {
     $output = get_option('iucp_upsell_manager_categories', array());
     if (isset($_POST['update_products'])) {
       $new_products = array();
+      print('<pre>' . print_r($_POST, true) . '</pre>');
+      die();
       foreach ($_POST['new_products'] as $category => $products) {
         foreach ($products as $id => $product) {
-          if (!isset($product['product_name'])) continue;
           $new_products[$category][$id] =
             $product;
         }

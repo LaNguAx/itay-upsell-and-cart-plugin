@@ -30,7 +30,6 @@ window.addEventListener("DOMContentLoaded", function (e) {
   if (productsSliders) {
     productsSliders.forEach((slider) => {
       const sliderName = slider.getAttribute("id").split("_").slice(1)[0];
-      console.log(sliderName);
       new Glide(`.glide.iucp-upsell-slider.${sliderName}`, {
         type: "carousel",
         perView: 4,

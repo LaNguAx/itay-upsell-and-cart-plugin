@@ -34,8 +34,9 @@ async function addProductToCart(productID, target) {
       variation: undefined,
     };
 
-    const productVariation = target.querySelector("pre")
-      ? JSON.parse(target.querySelector("pre").textContent)
+    console.log(target);
+    const productVariation = target.querySelector("#product-attributes")
+      ? JSON.parse(target.querySelector("#product-attributes").value)
       : undefined;
 
     if (productVariation) {
@@ -48,7 +49,6 @@ async function addProductToCart(productID, target) {
       }
       product.variation = newVariation;
     }
-    console.log(product);
     const fetchUrl = `${storeData.siteUrl}/wp-json/wc/store/v1/cart/add-item`;
 
     const cartResponse = await fetch(fetchUrl, {

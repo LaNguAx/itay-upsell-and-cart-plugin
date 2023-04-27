@@ -39,7 +39,90 @@
                   'category' => $category_name
                 ));
                 foreach ($get_products as $product) {
+                  print('<pre>' . print_r($product->get_id(), true) . '</pre>');
+                  $product_children = $product->get_children();
+                  $products_data = array();
+                  // if it's a variable product with children
+                  if (count($product_children)) {
+                    foreach ($product_children as $child) {
+                      $product_child = wc_get_product($child);
+                      $product_id = $product_child->get_id();
+                      $products_data[$product_id] = array(
+                        'product_id' => $product_child->get_id(),
+                        'product_name' => $product_child->get_name(),
+                        'product_variations' => $product_child->get_attributes(),
+                        'product_type' => $product_child->get_type()
+                      );
+                      $first_arr_key = array_key_first($products_data[$product_id]['product_variations']);
+
+                      if (!is_object($products_data[$product_id]['product_variations'][$first_arr_key])) {
+                        // If the product has variations
+                        print('<pre>' . print_r($products_data[$product_id]['product_variations'], true) . '</pre>');
+                        $product_variations = $products_data[$product_id]['product_variations'];
+
+                        // You are doing a mistake here, you dont need to loop through all of the variations, you already got the id of the product that is the variation, simply output it and you're done with backend portion of it.
+                        // Just output the product as is with its variations as data that should be passed and thats it. It'll work perfectly, dont loop through the variations for each product because some products have multiple variations.
+                        foreach ($product_variations as $variation_name => $variation_value) {
+                ?>
+
+                          <div class="product-container">
+                            <div class="product-image">
+                              <input type="checkbox" class="product-name" id="product-id" name="<?php echo 'new_products[' . $category_name . '][' . $product_id . '][product_name]' ?>" value="<?php echo $products_data[$product_id]['product_name'] ?>">
+                              <label for="product-id"><?php echo $product_child->get_image()  ?></label>
+
+                              <div class="product-variations hidden">
+                                <input class="product-variation-attributes" type="<?php echo ($checked ? 'hidden' : 'checkbox')  ?>" name="<?php echo 'new_products[' . $category_name . '][' . $product_id . '][product_type]' ?>" value="<?php echo $products_data[$product_id]['product_type'] ?>">
+
+                                <input class="product-variation-attributes" type="<?php echo ($checked ? 'hidden' : 'checkbox')  ?>" name="<?php echo 'new_products[' . $category_name . '][' . $product_id . '][product_variations][' . $variation_name . '][]' ?>" value="<?php echo $products_data[$product_id]['product_variations'][$variation_name] ?>">
+                              </div>
+                            </div>
+                            <div class="product-attributes">
+                              <p class="product-name"><?php echo $products_data[$product_id]['product_name']  ?></p>
+                              <p class="product-price"><?php echo $product_child->get_price() ?><span>$</span></p>
+                              <p><?php echo $products_data[$product_id]['product_type']  ?></p>
+                              <p><?php echo $variation_value ?></p>
+                            </div>
+                          </div>
+
+
+
+                <?php
+
+
+
+                        }
+                      }
+                    }
+                  } else {
+                    // If it's a simple product with no children
+                  }
+                }
+                ?>
+              </div>
+            </div>
+          <?php
+          }
+          ?>
+          <br class="line-breaker">
+          <?php
+          settings_fields('iucp_upsell_manager_settings');
+          submit_button('Update Products', 'primary', 'submit', true);
+          ?>
+          <input type="hidden" name="update_products" value="1">
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+<?php
+
+/**
+ *
+ * 
+ * 
                   $checked = isset($products_found[$category_name][$product->get_id()]);
+
 
                   $product_data = array(
                     'product_name' => $product->get_name(),
@@ -47,23 +130,24 @@
                     'product_variations' => $product->is_type('variable') ? $product->get_variation_attributes() : null
                   );
                   if (!is_null($product_data['product_variations'])) {
+
+                    $product_variations = $product->get_children();
+                    $product_variations_in_db = isset($products_found[$category_name][$product->get_id()]['product_variations']) ? $products_found[$category_name][$product->get_id()]['product_variations'] : null;
+
                     foreach ($product_data['product_variations'] as $variation_name => $variations) {
                       foreach ($variations as $variation) {
                         $product_data['product_variations'] = array($variation_name => $variation);
-                        // print('<pre>' . print_r($product_data, true) . '</pre>');
-                        $checkedVariation;
-                        // FIX HERE WHEN LOADING THE PAGE IT DOESNT RENDER CORRECTLY THE CHECKED FOR THE CHECKBOXES!! BECAUSE YOU HAVE MULTIPLE CHECKBOXES FOR EACH ITEM AND YOU JUST CHECK WETHER OR NOT THAT ITEMS EXIST AND YOU SHOULD CHECK FOR WETHER VARIATION EXISTS!!!
-                        if ($checked) {
-                          // print('<pre>' . print_r($products_found, true) . '</pre>');
-                          // die();
-                          $checkedVariation = isset($products_found[$category_name][$product->get_id()]['product_variations'][$variation_name][$variation]);
-                          print('<pre>' . print_r($products_found[$category_name][$product->get_id()]['product_variations'][$variation_name], true) . '</pre>');
-                          die();
-                        }
+
+                        $checked = isset($product_variations_in_db[$variation_name]) ?  in_array($variation, $product_variations_in_db[$variation_name]) : null;
+
+
+
+                        // print('<pre>' . print_r($product->get_id(), true) . '</pre>');
+                        // print('<pre>' . print_r($products_children->get_variation_attributes(), true) . '</pre>');
                 ?>
                         <div class="product-container">
                           <div class="product-image">
-                            <input type="checkbox" class="product-name" id="product-id" name="<?php echo 'new_products[' . $category_name . '][' . $product->get_id() . '][product_name]' ?>" value="<?php echo $product_data['product_name'] ?>" <?php echo ($checked ? 'checked' : '')  ?>>
+                            <input type="checkbox" class="product-name" id="product-id" name="<?php echo 'new_products[' . $category_name . '][' . $product->get_id() . '][product_name]' ?>" value="<?php echo $product_data['product_name'] ?>" <?php echo ($checked ? 'checked' : '') ?>>
                             <label for="product-id"><?php echo $product->get_image()  ?></label>
 
                             <div class="product-variations hidden">
@@ -98,25 +182,6 @@
                     </div>
                 <?php
                   }
-                }
-
-                ?>
-              </div>
-            </div>
-          <?php
-          }
-          ?>
-          <br class="line-breaker">
-          <?php
-          settings_fields('iucp_upsell_manager_settings');
-          submit_button('Update Products', 'primary', 'submit', true);
-          ?>
-          <input type="hidden" name="update_products" value="1">
-        </form>
-      </div>
-
-    </div>
-  </div>
-
-
-</div>
+                } 
+ * 
+ * */

@@ -11,8 +11,6 @@ foreach ($iucp_upsell_products as $category => $product) {
 // print('<pre>' . print_r($products_within_categories, true) . '</pre>');
 // die();
 if (!$iucp_upsell_products) return;
-print('<pre>' . print_r($product_categories, true) . '</pre>');
-die();
 ?>
 <div class="iucp-category-container">
   <div id="iucp-upsell-main-category-container" class="glide iucp-upsell-categories-container">
@@ -23,7 +21,6 @@ die();
           foreach ($product_categories as $category) {
             $first_product = array_key_first($products_within_categories[$category]);
             $first_product_data = wc_get_product($first_product);
-            print('<pre>' . print_r($category, true) . '</pre>');
           ?>
             <li id="<?php echo $category ?>" class="glide__slide">
               <div class="product-container">
@@ -55,22 +52,58 @@ die();
             <?php
             foreach ($products as $product_id => $product) {
               $current_product = wc_get_product($product_id);
-              // if (!$current_product->is_type('variable')) {
+              if (!$current_product->is_type('variable')) {
             ?>
-              <li id="<?php echo $category ?>" class="glide__slide">
-                <form class="product-container">
-                  <div class="product-image"><?php echo $current_product->get_image() ?></div>
-                  <p class="product-name"><?php echo $current_product->get_name() ?></p>
-                  <p class="product-price"><?php echo $current_product->get_price() . get_woocommerce_currency_symbol() ?></p>
-                  <span class="product-button" data-product-type="<?php echo $current_product->get_type() ?>" data-product-id="<?php echo $current_product->get_id() ?>">
-                    <a href="<?php echo $current_product->add_to_cart_url() ?>"><?php echo ($current_product->is_type('grouped') ? 'View Products' : 'Add To Cart') ?></a>
-                    <span class="lds-dual-ring hidden"></span>
-                    <span class="add-to-cart-success hidden">Item Added To Cart!</span>
-                  </span>
-                </form>
-              </li>
+                <li id="<?php echo $category ?>" class="glide__slide">
+                  <form class="product-container">
+                    <div class="product-image"><?php echo $current_product->get_image() ?></div>
+                    <p class="product-name"><?php echo $current_product->get_name() ?></p>
+                    <p class="product-price"><?php echo $current_product->get_price() . get_woocommerce_currency_symbol() ?></p>
+                    <span class="product-button" data-product-type="<?php echo $current_product->get_type() ?>" data-product-id="<?php echo $current_product->get_id() ?>">
+
+
+                      <a href="<?php echo $current_product->add_to_cart_url() ?>"><?php echo ($current_product->is_type('grouped') ? 'View Products' : 'Add To Cart') ?></a>
+                      <span class="lds-dual-ring hidden"></span>
+                      <span class="add-to-cart-success hidden">Item Added To Cart!</span>
+                    </span>
+                  </form>
+                </li>
+
+                <?php
+              } else {
+                $all_product_variations = $current_product->get_variation_attributes();
+                foreach ($all_product_variations as $variation_name => $variations) {
+                  foreach ($variations as $variation) {
+
+                    $variation_exists = isset($products_within_categories[$category][$current_product->get_id()]['product_variations'][$variation_name]) ? in_array($variation, $products_within_categories[$category][$current_product->get_id()]['product_variations'][$variation_name]) : null;
+
+
+                    if ($variation_exists) {
+                      $product_attributes_send = json_encode(array(
+                        $variation_name => $variation
+                      ));
+
+                ?>
+                      <li id="<?php echo $category ?>" class="glide__slide">
+                        <form class="product-container">
+                          <div class="product-image"><?php echo $current_product->get_image() ?></div>
+                          <p class="product-name"><?php echo $current_product->get_name()  . '<br>' . $variation ?></p>
+                          <p class="product-price"><?php echo $current_product->get_price() . get_woocommerce_currency_symbol() ?></p>
+                          <span class="product-button" data-product-type="<?php echo $current_product->get_type() ?>" data-product-id="<?php echo $current_product->get_id() ?>">
+                            <input type="hidden" id="product-attributes" name="product-attributes" value="<?php echo esc_attr($product_attributes_send) ?>">
+
+                            <a href="<?php echo $current_product->add_to_cart_url() ?>"><?php echo ($current_product->is_type('grouped') ? 'View Products' : 'Add To Cart') ?></a>
+                            <span class="lds-dual-ring hidden"></span>
+                            <span class="add-to-cart-success hidden">Item Added To Cart!</span>
+                          </span>
+                        </form>
+                      </li>
 
             <?php
+                    }
+                  }
+                }
+              }
             }
             ?>
           </ul>
