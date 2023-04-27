@@ -31,21 +31,21 @@ class dashboardController {
 
 
   public function setSetting() {
-    $setting = array(
+    $setting = array(array(
       'option_group' => 'iucp_dashboard_settings',
       'option_name' => 'iucp_dashboard_setting',
       'callback' => array($this->dashboard_callbacks, 'validateData')
-    );
+    ));
     $this->settings->setSetting($setting);
   }
 
   public function setSection() {
-    $section = array(
+    $section = array(array(
       'id' => 'iucp_dashboard_index',
       'title' => 'Itay Upsell & Cart Plugin Settings',
       'callback' => array($this->dashboard_callbacks, 'sectionManager'),
       'page' => 'itay_upsell_and_cart_plugin'
-    );
+    ));
     $this->settings->setSection($section);
   }
   public function setFields() {

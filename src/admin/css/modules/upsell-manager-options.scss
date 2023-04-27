@@ -1,0 +1,21 @@
+.wrap.upsell-manager-options {
+  .iucp-setting-container.color {
+    .toggle-background {
+      margin-bottom: 1rem;
+      label {
+        margin-right: 1rem;
+      }
+      p {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        margin-right: 1rem;
+      }
+    }
+  }
+  .iucp-flex {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+  }
+}

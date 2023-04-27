@@ -73,18 +73,34 @@ class UpsellController extends BaseController {
 
   public function setSetting() {
     $setting = array(
-      'option_group' => 'iucp_upsell_manager_settings',
-      'option_name' => 'iucp_upsell_manager_categories',
-      'callback' => array($this->upsell_callbacks, 'validateData')
+      array(
+        'option_group' => 'iucp_upsell_manager_settings',
+        'option_name' => 'iucp_upsell_manager_categories',
+        'callback' => array($this->upsell_callbacks, 'validateProductsData')
+      ),
+      array(
+        'option_group' => 'iucp_upsell_manager_options_group',
+        'option_name' => 'iucp_upsell_manager_options',
+        'callback' => array($this->upsell_callbacks, 'validateOptionsData')
+      )
     );
     $this->settings->setSetting($setting);
   }
   public function setSection() {
     $section = array(
-      'id' => 'iucp_upsell_manager_index',
-      'title' => 'Itay Upsell Manager',
-      'callback' => array($this->upsell_callbacks, 'sectionManager'),
-      'page' => 'itay_upsell_manager'
+      array(
+        'id' => 'iucp_upsell_manager_index',
+        'title' => 'Itay Upsell Manager',
+        'callback' => array($this->upsell_callbacks, 'sectionProductsManager'),
+        'page' => 'itay_upsell_manager'
+      ),
+      array(
+        'id' => 'iucp_upsell_manager_options',
+        'title' => 'Upsell Manager Options',
+        'callback' => array($this->upsell_callbacks, 'sectionOptionsManager'),
+        'page' => 'itay_upsell_manager#tab-3'
+      )
+
     );
     $this->settings->setSection($section);
   }
@@ -107,6 +123,124 @@ class UpsellController extends BaseController {
         ),
       );
     }
+    array_push(
+      $fields,
+      array(
+        'id' => 'upsell_heading',
+        'title' => 'Upsell Heading',
+        'callback' => array($this->upsell_callbacks, 'textOptionsField'),
+        'page' => 'itay_upsell_manager#tab-3',
+        'section' => 'iucp_upsell_manager_options',
+        'args' => array(
+          'option_name' => 'iucp_upsell_manager_options',
+          'feature_name' => 'iucp_upsell_heading',
+          'placeholder' => 'Enter the heading for your container. <br> Leave empty to have no heading.'
+        )
+      ),
+      array(
+        'id' => 'upsell_subheading',
+        'title' => 'Upsell Subheading',
+        'callback' => array($this->upsell_callbacks, 'textOptionsField'),
+        'page' => 'itay_upsell_manager#tab-3',
+        'section' => 'iucp_upsell_manager_options',
+        'args' => array(
+          'option_name' => 'iucp_upsell_manager_options',
+          'feature_name' => 'iucp_upsell_subheading',
+          'placeholder' => 'Enter the subheading for your container. <br> Leave empty to have no subheading.'
+        )
+      ),
+      array(
+        'id' => 'upsell_category_button_text',
+        'title' => 'Category Button Text',
+        'callback' => array($this->upsell_callbacks, 'textOptionsField'),
+        'page' => 'itay_upsell_manager#tab-3',
+        'section' => 'iucp_upsell_manager_options',
+        'args' => array(
+          'option_name' => 'iucp_upsell_manager_options',
+          'feature_name' => 'iucp_category_button_text',
+          'placeholder' => 'Create concise button category text. <br> Default: View More'
+        )
+      ),
+      array(
+        'id' => 'upsell_product_button_text',
+        'title' => 'Product Button Text',
+        'callback' => array($this->upsell_callbacks, 'textOptionsField'),
+        'page' => 'itay_upsell_manager#tab-3',
+        'section' => 'iucp_upsell_manager_options',
+        'args' => array(
+          'option_name' => 'iucp_upsell_manager_options',
+          'feature_name' => 'iucp_product_button_text',
+          'placeholder' => 'Create concise button product text. <br> Default: Add To Cart'
+        )
+      ),
+      array(
+        'id' => 'upsell_category_container_background_color',
+        'title' => 'Category Container Background Color',
+        'callback' => array($this->upsell_callbacks, 'colorOptionsField'),
+        'page' => 'itay_upsell_manager#tab-3',
+        'section' => 'iucp_upsell_manager_options',
+        'args' => array(
+          'option_name' => 'iucp_upsell_manager_options',
+          'feature_name' => 'iucp_category_container_background_color',
+          'placeholder' => 'Choose a background color. <br> Leave empty for transparent background -> Suggested!',
+          'question' => 'Colored Background? '
+        )
+      ),
+      array(
+        'id' => 'upsell_heading_text_color',
+        'title' => 'Upsell Heading Text Color',
+        'callback' => array($this->upsell_callbacks, 'colorOptionsField'),
+        'page' => 'itay_upsell_manager#tab-3',
+        'section' => 'iucp_upsell_manager_options',
+        'args' => array(
+          'option_name' => 'iucp_upsell_manager_options',
+          'feature_name' => 'iucp_upsell_heading_text_color',
+          'placeholder' => 'Choose a text color. <br> Default: #FFF - White',
+          'question' => 'Colored Heading Text? '
+        )
+      ),
+      array(
+        'id' => 'upsell_subheading_text_color',
+        'title' => 'Upsell Subheading Text Color',
+        'callback' => array($this->upsell_callbacks, 'colorOptionsField'),
+        'page' => 'itay_upsell_manager#tab-3',
+        'section' => 'iucp_upsell_manager_options',
+        'args' => array(
+          'option_name' => 'iucp_upsell_manager_options',
+          'feature_name' => 'iucp_upsell_subheading_text_color',
+          'placeholder' => 'Choose a text color. <br> Default: #FFF - White',
+          'question' => 'Colored Subheading Text? '
+        )
+      ),
+      array(
+        'id' => 'upsell_category_button_background_color',
+        'title' => 'Category Button Background Color',
+        'callback' => array($this->upsell_callbacks, 'colorOptionsField'),
+        'page' => 'itay_upsell_manager#tab-3',
+        'section' => 'iucp_upsell_manager_options',
+        'args' => array(
+          'option_name' => 'iucp_upsell_manager_options',
+          'feature_name' => 'iucp_upsell_category_button_background_color',
+          'placeholder' => 'Assign a background color: ',
+          'question' => 'Choose Category Button Background Color?',
+          'always_on' => true
+        )
+      ),
+      array(
+        'id' => 'upsell_product_button_background_color',
+        'title' => 'Product Button Background Color',
+        'callback' => array($this->upsell_callbacks, 'colorOptionsField'),
+        'page' => 'itay_upsell_manager#tab-3',
+        'section' => 'iucp_upsell_manager_options',
+        'args' => array(
+          'option_name' => 'iucp_upsell_manager_options',
+          'feature_name' => 'iucp_upsell_product_button_background_color',
+          'placeholder' => 'Assign a background color: ',
+          'question' => 'Choose Product Button Background Color?',
+          'always_on' => true
+        )
+      )
+    );
     $this->settings->setFields($fields);
   }
 

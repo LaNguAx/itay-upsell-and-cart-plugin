@@ -8,6 +8,7 @@
   <ul class="nav nav-tabs">
     <li class="<?php echo (!$categories ? 'active' : '') ?>"><a href="#tab-1">Choose Categories</a></li>
     <li class="<?php echo ($categories ? 'active' : 'hidden') ?>"><a href="#tab-2">Select Products</a></li>
+    <li class="<?php echo ($categories ? '' : 'hidden') ?>"><a href="#tab-3">Upsell Options</a></li>
   </ul>
 
   <div class="tab-content">
@@ -20,14 +21,15 @@
         ?>
       </form>
     </div>
-    <div id="tab-2" class="tab-pane <?php echo ($categories ? 'active' : 'hidden') ?>">
+    <div id="tab-2" class="tab-pane <?php echo ($categories ? 'active' : 'hidden') ?> ">
       <h3 class="tab-heading">Select Products</h3>
       <p class="tab-subheading">Select the products you'd like to showcase in the slideshow in the product page!</p>
 
       <div class="wrap upsell-products-container">
         <form action="options.php" method="post">
           <?php
-          foreach ($categories as $category_name => $term_id) {
+          if ($categories)
+            foreach ($categories as $category_name => $term_id) {
 
           ?>
             <div class="container">
@@ -39,7 +41,6 @@
                   'category' => $category_name
                 ));
                 foreach ($get_products as $product) {
-                  print('<pre>' . print_r($product->get_id(), true) . '</pre>');
                   $product_children = $product->get_children();
                   $products_data = array();
                   // if it's a variable product with children
@@ -54,54 +55,76 @@
                         'product_type' => $product_child->get_type()
                       );
                       $first_arr_key = array_key_first($products_data[$product_id]['product_variations']);
+                      // print('<pre>' . print_r(, true) . '</pre>');
+                      // print('<pre>' . print_r($category_name, true) . '</pre>');
+                      // print('<pre>' . print_r($product_id, true) . '</pre>');
+                      // die();
 
                       if (!is_object($products_data[$product_id]['product_variations'][$first_arr_key])) {
+                        $checked = isset($products_found[$category_name][$product_id]);
                         // If the product has variations
-                        print('<pre>' . print_r($products_data[$product_id]['product_variations'], true) . '</pre>');
-                        $product_variations = $products_data[$product_id]['product_variations'];
 
-                        // You are doing a mistake here, you dont need to loop through all of the variations, you already got the id of the product that is the variation, simply output it and you're done with backend portion of it.
-                        // Just output the product as is with its variations as data that should be passed and thats it. It'll work perfectly, dont loop through the variations for each product because some products have multiple variations.
-                        foreach ($product_variations as $variation_name => $variation_value) {
+                        $product_variations = $products_data[$product_id]['product_variations'];
                 ?>
 
-                          <div class="product-container">
-                            <div class="product-image">
-                              <input type="checkbox" class="product-name" id="product-id" name="<?php echo 'new_products[' . $category_name . '][' . $product_id . '][product_name]' ?>" value="<?php echo $products_data[$product_id]['product_name'] ?>">
-                              <label for="product-id"><?php echo $product_child->get_image()  ?></label>
+                        <div class="product-container">
+                          <div class="product-image">
+                            <input type="checkbox" class="product-name" id="product-id" name="<?php echo 'new_products[' . $category_name . '][' . $product_id . '][product_name]' ?>" value="<?php echo $products_data[$product_id]['product_name'] ?>" <?php echo ($checked ? 'checked' : '')  ?>>
+                            <label for="product-id"><?php echo $product_child->get_image()  ?></label>
 
-                              <div class="product-variations hidden">
-                                <input class="product-variation-attributes" type="<?php echo ($checked ? 'hidden' : 'checkbox')  ?>" name="<?php echo 'new_products[' . $category_name . '][' . $product_id . '][product_type]' ?>" value="<?php echo $products_data[$product_id]['product_type'] ?>">
+                            <div class="product-variations hidden">
+                              <input class="product-variation-attributes" type="<?php echo ($checked ? 'hidden' : 'checkbox')  ?>" name="<?php echo 'new_products[' . $category_name . '][' . $product_id . '][product_type]' ?>" value="<?php echo $products_data[$product_id]['product_type'] ?>">
 
-                                <input class="product-variation-attributes" type="<?php echo ($checked ? 'hidden' : 'checkbox')  ?>" name="<?php echo 'new_products[' . $category_name . '][' . $product_id . '][product_variations][' . $variation_name . '][]' ?>" value="<?php echo $products_data[$product_id]['product_variations'][$variation_name] ?>">
-                              </div>
-                            </div>
-                            <div class="product-attributes">
-                              <p class="product-name"><?php echo $products_data[$product_id]['product_name']  ?></p>
-                              <p class="product-price"><?php echo $product_child->get_price() ?><span>$</span></p>
-                              <p><?php echo $products_data[$product_id]['product_type']  ?></p>
-                              <p><?php echo $variation_value ?></p>
+
+
+                              <?php
+                              $variations_html = '';
+                              foreach ($product_variations as $variation_name => $variation_value) {
+                                $variations_html .= $variation_name . ' = ' . $variation_value . '<br>';
+                              ?>
+                                <input class="product-variation-attributes" type="<?php echo ($checked ? 'hidden' : 'checkbox')  ?>" name="<?php echo 'new_products[' . $category_name . '][' . $product_id . '][product_variations][' . $variation_name . ']' ?>" value="<?php echo $products_data[$product_id]['product_variations'][$variation_name] ?>">
+                              <?php } ?>
                             </div>
                           </div>
+                          <div class="product-attributes">
+                            <p class="product-name"><?php echo $products_data[$product_id]['product_name']  ?></p>
+                            <p class="product-price"><?php echo $product_child->get_price() ?><span>$</span></p>
+                            <p><?php echo $products_data[$product_id]['product_type'] . ' product' ?></p>
+                            <p><?php echo $variations_html ?></p>
+                          </div>
+                        </div>
 
 
 
-                <?php
+                    <?php
 
-
-
-                        }
                       }
                     }
                   } else {
                     // If it's a simple product with no children
+                    $checked = isset($products_found[$category_name][$product->get_id()]);
+
+                    ?>
+                    <div class="product-container">
+                      <div class="product-image">
+                        <input type="checkbox" class="product-name" id="product-id" name="<?php echo 'new_products[' . $category_name . '][' . $product->get_id() . ']'  ?>" value="<?php echo $product->get_name() ?>" <?php echo ($checked ? 'checked' : '')  ?>>
+                        <label for="product-id"><?php echo $product->get_image()  ?></label>
+                      </div>
+                      <div class="product-attributes">
+                        <p class="product-name"><?php echo $product->get_name()  ?></p>
+                        <p class="product-price"><?php echo $product->get_price() ?><span>$</span></p>
+                        <p><?php echo $product->get_type() ?></p>
+                      </div>
+
+                    </div>
+                <?php
                   }
                 }
                 ?>
               </div>
             </div>
           <?php
-          }
+            }
           ?>
           <br class="line-breaker">
           <?php
@@ -112,6 +135,23 @@
         </form>
       </div>
 
+    </div>
+    <div id="tab-3" class="tab-pane">
+      <div class="wrap upsell-manager-options">
+        <form action="
+      options.php" method="post">
+          <?php
+          settings_fields('iucp_upsell_manager_options_group');
+          do_settings_sections('itay_upsell_manager#tab-3');
+          ?>
+          <div class="iucp-flex">
+            <?php
+            submit_button();
+            submit_button('Reset', 'secondary', 'submit');
+            ?>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
 </div>

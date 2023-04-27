@@ -14,7 +14,7 @@ class Settings {
   public array $admin_subpages = array();
 
   public array $settings = array();
-  public array $section = array();
+  public array $sections = array();
   public array $fields = array();
 
   public function register() {
@@ -28,26 +28,28 @@ class Settings {
     }
   }
 
-  public function setSetting($setting) {
+  public function setSetting(array $setting) {
     $this->settings = $setting;
     return $this;
   }
 
-  public function setSection($section) {
-    $this->section = $section;
+  public function setSection(array $section) {
+    $this->sections = $section;
     return $this;
   }
 
-  public function setFields($fields) {
+  public function setFields(array $fields) {
     $this->fields = $fields;
     return $this;
   }
 
   public function generateSettings() {
-    register_setting($this->settings['option_group'], $this->settings['option_name'], isset($this->settings['callback']) ? $this->settings['callback'] : null);
-
-    add_settings_section($this->section['id'], $this->section['title'], isset($this->section['callback']) ? $this->section['callback'] : null, $this->section['page']);
-
+    foreach ($this->settings as $setting) {
+      register_setting($setting['option_group'], $setting['option_name'], isset($setting['callback']) ? $setting['callback'] : null);
+    }
+    foreach ($this->sections as $section) {
+      add_settings_section($section['id'], $section['title'], isset($section['callback']) ? $section['callback'] : null, $section['page']);
+    }
     foreach ($this->fields as $field) {
       add_settings_field($field['id'], $field['title'], isset($field['callback']) ? $field['callback'] : null, $field['page'], $field['section'], isset($field['args']) ? $field['args'] : null);
     }

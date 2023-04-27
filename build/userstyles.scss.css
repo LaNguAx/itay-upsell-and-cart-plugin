@@ -149,7 +149,9 @@
 }
 .glide.iucp-upsell-categories-container .product-container,
 .glide.iucp-upsell-products-container .product-container {
-  height: auto;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
   cursor: pointer !important;
   text-align: center;
 }
@@ -168,11 +170,15 @@
   aspect-ratio: 1/1;
   border-radius: 1rem;
 }
+.glide.iucp-upsell-categories-container .product-container #product-attributes-container,
+.glide.iucp-upsell-products-container .product-container #product-attributes-container {
+  margin-top: auto;
+}
 .glide.iucp-upsell-categories-container .product-container .product-name,
 .glide.iucp-upsell-products-container .product-container .product-name {
   font-size: 1.3rem;
   font-weight: bold;
-  margin-bottom: 0.5rem;
+  margin-bottom: auto;
 }
 .glide.iucp-upsell-categories-container .product-container .product-price,
 .glide.iucp-upsell-products-container .product-container .product-price {
@@ -186,7 +192,7 @@
   width: 80%;
   height: 40px;
   margin: auto;
-  background-color: lightblue;
+  background-color: #add8e6;
   border-radius: 1rem;
 }
 .glide.iucp-upsell-categories-container .product-container .product-button a,

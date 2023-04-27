@@ -1,3 +1,4 @@
+import "./upsell-manager-options.js";
 window.addEventListener("DOMContentLoaded", () => {
   const navTabContainer = document.querySelector(".nav.nav-tabs");
   if (navTabContainer) {

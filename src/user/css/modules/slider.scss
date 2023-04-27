@@ -7,7 +7,10 @@
   margin: auto;
   margin-bottom: 2rem;
   .product-container {
-    height: auto;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
     * {
       margin: 0;
       padding: 0;
@@ -22,10 +25,13 @@
       }
       margin-bottom: 0.5rem;
     }
+    #product-attributes-container {
+      margin-top: auto;
+    }
     .product-name {
       font-size: 1.3rem;
       font-weight: bold;
-      margin-bottom: 0.5rem;
+      margin-bottom: auto;
     }
     .product-price {
       font-size: 1.2rem;
@@ -37,7 +43,7 @@
       width: 80%;
       height: 40px;
       margin: auto;
-      background-color: lightblue;
+      background-color: #add8e6;
       border-radius: 1rem;
       a {
         color: #fff;
