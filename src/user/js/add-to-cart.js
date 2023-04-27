@@ -1,3 +1,4 @@
+let requestSent = false;
 window.addEventListener("DOMContentLoaded", () => {
   const productsContainer = document.querySelector(".iucp-products-container");
   productsContainer.addEventListener("click", async function (e) {
@@ -11,6 +12,8 @@ window.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
+      if (requestSent) return;
+      requestSent = true;
       showSpinner(target);
       const response = await addProductToCart(target.dataset.productId, target);
       showSpinner(target);
@@ -86,5 +89,7 @@ function showSuccessMessage(target) {
     productButton
       .querySelector(".add-to-cart-success")
       .classList.toggle("hidden");
+
+    requestSent = false;
   }, 1000);
 }

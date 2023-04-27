@@ -66,7 +66,10 @@ class UpsellCallbacks {
       'iucp_category_button_text' => 'View More',
       'iucp_product_button_text' => 'Add To Cart',
       'iucp_upsell_category_button_background_color' => '#add8e6',
-      'iucp_upsell_product_button_background_color' => '#add8e6'
+      'iucp_upsell_product_button_background_color' => '#add8e6',
+      'iucp_upsell_category_button_text_color' => '#ffffff',
+      'iucp_upsell_product_button_text_color' => '#ffffff',
+      'iucp_product_add_to_cart_success' => 'Item Added To Cart!'
     );
     if ($_POST['submit'] === 'Reset') {
       return $defaults;
@@ -117,7 +120,7 @@ class UpsellCallbacks {
         <br>
         <?php if (!$always_on) {
         ?>
-          <p>Leave unchecked for transparent.</p>
+          <p>Leave unchecked for default.</p>
         <?php
         } ?>
       </div>

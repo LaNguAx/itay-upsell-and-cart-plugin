@@ -141,15 +141,37 @@
   cursor: -webkit-grabbing;
 }
 
+.iucp-category-container {
+  padding: 1rem;
+  border-radius: 2rem;
+  margin-bottom: 2rem;
+}
+.iucp-category-container .iucp-headers-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.iucp-category-container .iucp-headers-wrap .iucp-upsell-heading {
+  font-size: 2.2rem;
+  letter-spacing: 1px;
+  margin-bottom: 0;
+}
+.iucp-category-container .iucp-headers-wrap .iucp-upsell-subheading {
+  font-size: 1.8rem;
+  letter-spacing: 1px;
+}
+
 .glide.iucp-upsell-categories-container,
 .glide.iucp-upsell-products-container {
-  width: 80%;
+  width: 90%;
   margin: auto;
   margin-bottom: 2rem;
 }
 .glide.iucp-upsell-categories-container .product-container,
 .glide.iucp-upsell-products-container .product-container {
   height: 100%;
+  margin-bottom: 0;
   display: flex;
   flex-direction: column;
   cursor: pointer !important;
@@ -163,12 +185,16 @@
 }
 .glide.iucp-upsell-categories-container .product-container .product-image,
 .glide.iucp-upsell-products-container .product-container .product-image {
+  width: -moz-fit-content;
+  width: fit-content;
+  margin: auto;
   margin-bottom: 0.5rem;
 }
 .glide.iucp-upsell-categories-container .product-container .product-image img,
 .glide.iucp-upsell-products-container .product-container .product-image img {
   aspect-ratio: 1/1;
   border-radius: 1rem;
+  margin: 0 !important;
 }
 .glide.iucp-upsell-categories-container .product-container #product-attributes-container,
 .glide.iucp-upsell-products-container .product-container #product-attributes-container {
@@ -176,16 +202,17 @@
 }
 .glide.iucp-upsell-categories-container .product-container .product-name,
 .glide.iucp-upsell-products-container .product-container .product-name {
-  font-size: 1.3rem;
+  font-size: 1;
   font-weight: bold;
   margin-bottom: auto;
 }
 .glide.iucp-upsell-categories-container .product-container .product-price,
 .glide.iucp-upsell-products-container .product-container .product-price {
-  font-size: 1.2rem;
+  font-size: 1;
 }
 .glide.iucp-upsell-categories-container .product-container .product-button,
 .glide.iucp-upsell-products-container .product-container .product-button {
+  letter-spacing: 1px;
   display: flex;
   align-items: center;
   justify-content: center;

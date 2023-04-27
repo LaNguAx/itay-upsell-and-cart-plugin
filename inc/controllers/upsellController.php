@@ -174,6 +174,18 @@ class UpsellController extends BaseController {
         )
       ),
       array(
+        'id' => 'upsell_add_to_cart_success',
+        'title' => 'Product Added To Cart Message',
+        'callback' => array($this->upsell_callbacks, 'textOptionsField'),
+        'page' => 'itay_upsell_manager#tab-3',
+        'section' => 'iucp_upsell_manager_options',
+        'args' => array(
+          'option_name' => 'iucp_upsell_manager_options',
+          'feature_name' => 'iucp_product_add_to_cart_success',
+          'placeholder' => 'Create concise successful add to cart message. <br> Default: Item Added To Cart!'
+        )
+      ),
+      array(
         'id' => 'upsell_category_container_background_color',
         'title' => 'Category Container Background Color',
         'callback' => array($this->upsell_callbacks, 'colorOptionsField'),
@@ -182,7 +194,7 @@ class UpsellController extends BaseController {
         'args' => array(
           'option_name' => 'iucp_upsell_manager_options',
           'feature_name' => 'iucp_category_container_background_color',
-          'placeholder' => 'Choose a background color. <br> Leave empty for transparent background -> Suggested!',
+          'placeholder' => 'Choose a background color for the container  ',
           'question' => 'Colored Background? '
         )
       ),
@@ -210,6 +222,34 @@ class UpsellController extends BaseController {
           'feature_name' => 'iucp_upsell_subheading_text_color',
           'placeholder' => 'Choose a text color. <br> Default: #FFF - White',
           'question' => 'Colored Subheading Text? '
+        )
+      ),
+      array(
+        'id' => 'upsell_category_button_text_color',
+        'title' => 'Category Button Text Color',
+        'callback' => array($this->upsell_callbacks, 'colorOptionsField'),
+        'page' => 'itay_upsell_manager#tab-3',
+        'section' => 'iucp_upsell_manager_options',
+        'args' => array(
+          'option_name' => 'iucp_upsell_manager_options',
+          'feature_name' => 'iucp_upsell_category_button_text_color',
+          'placeholder' => 'Assign a text color: ',
+          'question' => 'Choose Category Text Button Color',
+          'always_on' => true
+        )
+      ),
+      array(
+        'id' => 'upsell_product_button_text_color',
+        'title' => 'Product Button Text Color',
+        'callback' => array($this->upsell_callbacks, 'colorOptionsField'),
+        'page' => 'itay_upsell_manager#tab-3',
+        'section' => 'iucp_upsell_manager_options',
+        'args' => array(
+          'option_name' => 'iucp_upsell_manager_options',
+          'feature_name' => 'iucp_upsell_product_button_text_color',
+          'placeholder' => 'Assign a text color: ',
+          'question' => 'Choose Product Text Button Color',
+          'always_on' => true
         )
       ),
       array(
