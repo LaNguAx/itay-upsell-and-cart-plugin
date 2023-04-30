@@ -47,7 +47,7 @@ class UpsellController extends BaseController {
     if (is_product() && $template_name === 'single-product/up-sells.php') {
       require_once($this->plugin_path . '/inc/templates/features/upsell-feature.php');
 
-      wp_enqueue_script('upsell-slider-js', $this->plugin_url . '/build/slider.js', array('jquery'), 1.0, date("h:i:s"), true);
+      wp_enqueue_script('upsell-slider-js', $this->plugin_url . '/build/slider.js', array(), 1.0, date("h:i:s"), true);
       wp_enqueue_style('user-styles-css', $this->plugin_url . '/build/userstyles.scss.css');
       wp_localize_script('upsell-slider-js', 'storeData', array(
         'siteUrl' => site_url(),

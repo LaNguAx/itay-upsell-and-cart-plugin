@@ -22,5 +22,8 @@ class Activate {
     if (!get_option('iucp_upsell_products')) {
       update_option('iucp_upsell_products', $defaults);
     }
+    if (!get_option('iucp_upsell_manager_options')) {
+      update_option('iucp_upsell_manager_options', $defaults);
+    }
   }
 }
