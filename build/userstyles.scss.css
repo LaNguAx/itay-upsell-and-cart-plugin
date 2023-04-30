@@ -202,13 +202,13 @@
 }
 .glide.iucp-upsell-categories-container .product-container .product-name,
 .glide.iucp-upsell-products-container .product-container .product-name {
-  font-size: 1;
+  font-size: 1rem;
   font-weight: bold;
   margin-bottom: auto;
 }
 .glide.iucp-upsell-categories-container .product-container .product-price,
 .glide.iucp-upsell-products-container .product-container .product-price {
-  font-size: 1;
+  font-size: 1rem;
 }
 .glide.iucp-upsell-categories-container .product-container .product-button,
 .glide.iucp-upsell-products-container .product-container .product-button {
@@ -321,7 +321,6 @@ body .iucp-upsell-overlay.active {
 }
 .iucp-cart-feature-container.inactive {
   right: -30vw;
-  display: none;
 }
 .iucp-cart-feature-container .iucp-cart-feature-toggle-cart-button {
   position: absolute;

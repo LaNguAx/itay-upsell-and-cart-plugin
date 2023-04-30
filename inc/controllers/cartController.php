@@ -34,22 +34,21 @@ class CartController extends BaseController {
     $this->setSections();
     $this->setFields();
 
-    // add_action('wp_loaded', array($this, 'generateCartFrontend'), 1);
-    // add_action('init', array($this, 'admin_bar'));
+    add_action('wp', array($this, 'generateCartFrontend'));
     $this->settings->setSubPages($this->subpages)->register();
   }
 
 
   public function generateCartFrontend() {
-    // if (!is_admin()) {
-    //   return require_once($this->plugin_path . '/inc/templates/features/cart-feature.php');
-    // wp_enqueue_script('cart-js', $this->plugin_url . '/build/cart.js', array(), 1.0, date("h:i:s"), true);
-    // wp_enqueue_style('user-styles-css', $this->plugin_url . 'build/userstyles.scss.css');
-    // wp_localize_script('cart-js', 'storeData', array(
-    //   'siteUrl' => site_url(),
-    //   'nonce' => wp_create_nonce('wc_store_api')
-    // ));
-    // }
+    if (!is_admin()) {
+      require_once($this->plugin_path . '/inc/templates/features/cart-feature.php');
+      wp_enqueue_script('cart-js', $this->plugin_url . '/build/cart.js', array(), 1.0, date("h:i:s"), true);
+      wp_enqueue_style('user-styles-css', $this->plugin_url . 'build/userstyles.scss.css');
+      wp_localize_script('cart-js', 'storeData', array(
+        'siteUrl' => site_url(),
+        'nonce' => wp_create_nonce('wc_store_api')
+      ));
+    }
   }
 
   public function addSubPage() {

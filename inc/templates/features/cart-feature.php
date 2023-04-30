@@ -1,4 +1,4 @@
-<div class="iucp-cart-feature-container hidden">
+<div class="iucp-cart-feature-container inactive">
   <button class="iucp-cart-feature-toggle-cart-button">🛒</button>
   <div class="iucp-cart-feature">
     <div class="iucp-cart-feature-headers-container">
