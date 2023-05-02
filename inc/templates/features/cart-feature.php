@@ -21,7 +21,7 @@
             <img src="http://itay-upsell-and-cart-plugin.local/wp-content/uploads/2023/04/ראשון-2.jpg" alt="" class="cart-image" />
           </div>
           <div class="iucp-cart-feature-product-details">
-            <p class="iucp-cart-feature-product-name">aiopfsaskfpaspfokaspofkapsokfpaskfpoaskfpoaskfpoakskpofoaokspf</p>
+            <p class="iucp-cart-feature-product-name"><?php ?></p>
             <div class="iucp-cart-feature-product-attributes">
               <p class="iucp-cart-feature-product-price">$12345</p>
             </div>

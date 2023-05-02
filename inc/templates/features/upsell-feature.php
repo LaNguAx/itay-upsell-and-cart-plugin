@@ -67,11 +67,12 @@ if (!$iucp_upsell_products) return;
                   <p class="product-name"><?php echo $current_product->get_name() ?></p>
                   <div id="product-attributes-container">
                     <p class="product-price"><?php echo $current_product->get_price() . get_woocommerce_currency_symbol() ?></p>
-                    <button style="background-color: <?php echo isset($iucp_upsell_options['iucp_upsell_product_button_background_color']) ? $iucp_upsell_options['iucp_upsell_product_button_background_color'] : '' ?>;" class="product-button" data-product-type="<?php echo $current_product->get_type() ?>" data-product-id="<?php echo $current_product->get_id() ?>">
+                    <a style="background-color: <?php echo isset($iucp_upsell_options['iucp_upsell_product_button_background_color']) ?  $iucp_upsell_options['iucp_upsell_product_button_background_color'] : '' ?>;" href="?add-to-cart=<?php echo $current_product->get_id() ?>" data-quantity="1" class="product-button button wp-element-button product_type_simple add_to_cart_button ajax_add_to_cart" data-product_id="<?php echo $current_product->get_id() ?>" data-product_sku="" aria-label="<?php echo $current_product->get_name() ?>" rel="nofollow">Add to cart</a>
+                    <?php /* <button style="background-color: <?php echo isset($iucp_upsell_options['iucp_upsell_product_button_background_color']) ?  /$iucp_upsell_options['iucp_upsell_product_button_background_color'] : '' ?>;" class="product-button" data-product-type="<?php echo $current_product->get_type() ?>" data-product-id="<?php echo $current_product->get_id() ?>">
                       <a style=" color: <?php echo isset($iucp_upsell_options['iucp_upsell_product_button_text_color']) ? $iucp_upsell_options['iucp_upsell_product_button_text_color'] : ''  ?>;" href="<?php echo $current_product->add_to_cart_url() ?>"><?php echo isset($iucp_upsell_options['iucp_product_button_text']) ? $iucp_upsell_options['iucp_product_button_text'] : '' ?></a>
                       <span class="lds-dual-ring hidden"></span>
                       <span class="add-to-cart-success hidden" style=" color: <?php echo isset($iucp_upsell_options['iucp_upsell_product_button_text_color']) ? $iucp_upsell_options['iucp_upsell_product_button_text_color'] : ''  ?>;"><?php echo isset($iucp_upsell_options['iucp_product_add_to_cart_success']) ? $iucp_upsell_options['iucp_product_add_to_cart_success'] : '' ?></span>
-                    </button>
+                    </button> */ ?>
                   </div>
                 </form>
               </li>
