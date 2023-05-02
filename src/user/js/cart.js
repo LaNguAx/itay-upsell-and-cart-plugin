@@ -62,6 +62,7 @@ class Cart {
       minute: "2-digit",
     });
     this.#timePicker[0].innerHTML = "";
+
     for (const [start, end] of Object.entries(this.#siteTimes)) {
       if (this.#todaySelected) {
         if (this.#userTime < start) {
@@ -74,33 +75,42 @@ class Cart {
   }
   submitForm() {
     //rendering a spinner
-
-    const data = {
-      date: this.#data.date,
-      time: this.#userTime,
-      nonce: this.#form.find("#iucp_date_time").val(),
-    };
     const url = this.#form.attr("data-url");
-
-    const formData = new FormData(this.#form[0]);
+    const data = {};
+    const formData = [...new FormData(this.#form[0])];
+    formData.forEach((element) => {
+      data[element[0]] = element[1];
+    });
+    console.log(data);
+    this.renderSpinner();
     jQuery.ajax({
       type: "POST",
       url: url,
-      data: formData,
-      processData: false,
-      contentType: false,
+      data: data,
       dataType: "json",
       success: function (data, textStatus, jqXHR) {
         //process data
         console.log(data);
-      },
+        this.showCart();
+      }.bind(this),
       error: function (data, textStatus, jqXHR) {
         //process error msg
         console.log(data);
       },
     });
   }
-  createDateObject() {}
+
+  showCart() {
+    jQuery(".iucp-address-container, .xoo-wsc-body, .xoo-wsc-footer").each(
+      function () {
+        jQuery(this).toggleClass("hidden");
+      }
+    );
+  }
+
+  renderSpinner() {
+    this.#form[0].innerHTML = "<div class='lds-dual-ring'></div>";
+  }
 
   initializeVariables() {
     this.#siteTimes = iucpTimes;
@@ -127,39 +137,3 @@ class Cart {
 }
 
 const iucpCart = new Cart();
-
-// class Cart {
-//   #cartToggled = false;
-//   #cartBtn;
-//   #cartContainer;
-//   cartState = {
-//     products: [],
-//   };
-
-//   constructor() {
-//     this.events();
-//   }
-//   events() {
-//     window.addEventListener("DOMContentLoaded", () => {
-//       this.initializeVariables();
-
-//       this.#cartBtn.addEventListener("click", (e) => {
-//         this.toggleCart();
-//       });
-//     });
-//   }
-//   initializeVariables() {
-//     this.#cartContainer = document.querySelector(
-//       ".iucp-cart-feature-container"
-//     );
-//     this.#cartBtn = document.querySelector(
-//       ".iucp-cart-feature-toggle-cart-button"
-//     );
-//   }
-//   toggleCart() {
-//     this.#cartContainer.classList.toggle("inactive");
-//     this.#cartToggled = this.cartToggled ? false : true;
-//   }
-// }
-// const cart = new Cart();
-// console.log("test");

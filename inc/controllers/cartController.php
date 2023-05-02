@@ -51,23 +51,44 @@ class CartController extends BaseController {
   }
 
   public function updateShippingFields($fields) {
-    // if (!isset($_COOKIE['iucp_session_address']))
-    // return $fields;
+    if (!isset($_COOKIE['iucp_session_address']))
+      return $fields;
 
     // Continue from here.
+    $iucp_data = json_decode(stripslashes($_COOKIE['iucp_session_address']), true);
 
-    $fields['shipping']['shipping_phone'] = array(
+    $fields['shipping']['delivery_time'] = array(
       'type' => 'select',
       'label' => 'Delivery Time',
       'required' => true,
       'placeholder' => 'Delivery Time',
       'options' => array(
-        'option_1' => 'helo',
-        'options_2' => 'hello2'
+        'option_1' => $iucp_data['arrival_time'],
       ),
-      'class'     => array('form-row-wide'),
+      'class'     => array('form-row-wide', 'update_totals_on_change'),
+    );
+    $fields['shipping']['location'] = array(
+      'type' => 'text',
+      'label' => 'Location',
+      'required' => true,
+      'placeholder' => 'Location',
+      'default' => $iucp_data['arrival_location'],
+      'class'     => array('form-row-wide', 'update_totals_on_change'),
+    );
+    $fields['shipping']['arrival_date'] = array(
+      'type' => 'text',
+      'label' => 'Arrival Date',
+      'readonly' => true,
+      'placeholder' => 'Arrival Date',
+      'default' => $iucp_data['arrival_date'],
+      'custom_attributes' => array(
+        'readonly' => 'readonly'
+      ),
+      'class'     => array('form-row-wide', 'update_totals_on_change'),
     );
 
+    // continue here updating the fields 
+    $fields['shipping']['shipping_state']['class'][] = 'update_totals_on_change';
     return $fields;
   }
 
@@ -88,25 +109,25 @@ class CartController extends BaseController {
 
   public function handleAjax() {
     check_ajax_referer('iucp_time', 'iucp_date_time');
+    header('Content-Type: application/json');
+
     if (isset($_COOKIE['iucp_session_address'])) {
       echo json_encode(array(
         'error' => 'invalid request, user already has cookies'
       ));
       die();
     }
+
     $session_address = array(
       'arrival_date' => $_POST['iucp_address_arrival_date'],
       'arrival_time' => $_POST['iucp_address_arrival_time'],
       'arrival_location' => $_POST['iucp_address_location'],
+
     );
-    // echo json_encode($session_address);
-
+    // $json = wp_json_encode($session_address, JSON_UNESCAPED_SLASHES);
     // To load the cookie !
-    // setcookie('iucp_session_address', json_encode($session_address), time() + 7200, COOKIEPATH, COOKIE_DOMAIN);
-
-    // setcookie('iucp_session_address', , time() + 62208000, '/', $_SERVER['HTTP_HOST']);
-    echo json_encode($_COOKIE);
-
+    setcookie('iucp_session_address', json_encode($session_address), time() + 7200, COOKIEPATH, COOKIE_DOMAIN);
+    echo json_encode($session_address['arrival_date']);
     die();
   }
 
@@ -117,8 +138,8 @@ class CartController extends BaseController {
     wp_enqueue_style('user-styles-css', $this->plugin_url . '/build/userstyles.scss.css');
 
     wp_localize_script('cart-js', 'iucpTimes', array(
-      '01:00' => '12:00',
-      '02:00' => '15:00',
+      '09:00' => '12:00',
+      '12:00' => '15:00',
       '15:00' => '18:00',
       '18:00' => '21:00',
     ));
@@ -126,7 +147,6 @@ class CartController extends BaseController {
 
   public function loadCartAddress() {
     $shipping_zones = WC_Shipping_Zones::get_zones();
-
 ?>
     <div class="iucp-address-container">
       <form autocomplete="off" id="iucp_form" action="#" method="post" data-url="<?php echo admin_url('admin-ajax.php'); ?>">
@@ -143,23 +163,7 @@ class CartController extends BaseController {
         <input required id="iucp_datepicker" type="text" name="iucp_address_arrival_date">
         <label id="arrival-time-label" class="hidden" for="iucp_address_arrival_time"><?php echo __('Delivery', 'woocommerce') ?></label>
         <?php $current_time = strtotime(wp_date('H:i')); ?>
-        <select id="iucp_address_arrival_time" name="iucp_address_arrival_time" class="hidden">
-          <!-- <?php $times = array(
-                  '01:00' => '12:00',
-                  '02:00' => '15:00',
-                  '15:00' => '18:00',
-                  '18:00' => '21:00',
-                );
-                foreach ($times as $start_time => $end_time) {
-                  $str_start_time = strtotime($start_time);
-                  if ($current_time - 3600 < $str_start_time) {
-                ?>
-              <option value="<?php echo $start_time . '-' . $end_time ?>"><?php echo $start_time . '-' . $end_time ?></option>
-          <?php }
-                }
-          ?> -->
-        </select>
-
+        <select id="iucp_address_arrival_time" name="iucp_address_arrival_time" class="hidden"> </select>
         <input type="hidden" name="action" value="iucp_create_date_time">
         <?php wp_nonce_field('iucp_time', 'iucp_date_time'); ?>
 
@@ -167,7 +171,6 @@ class CartController extends BaseController {
         <label id="iucp-label-submit" for="iucp_submit_address_button"><?php echo __('Add To Cart', 'woocommerce') ?></label>
       </form>
     </div>
-
 <?php
   }
 
