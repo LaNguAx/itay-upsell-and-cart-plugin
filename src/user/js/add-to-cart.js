@@ -1,3 +1,4 @@
+// Irrelevant because I made the product work with the built-in add to cart ajax of woocoommerce.
 class AddToCart {
   #requestSent;
   #productsContainer;
@@ -35,9 +36,9 @@ class AddToCart {
 
       if (this.#requestSent) return;
       this.#requestSent = true;
+      console.log(target);
       this.showSpinner(target);
-      console.log(target.dataset.productId);
-      const response = await this.addProductToCart(target.dataset.productId);
+      const response = await this.addProductToCart(target.dataset.product_id);
       this.showSpinner(target);
       this.showSuccessMessage(target);
     } catch (error) {
@@ -59,7 +60,7 @@ class AddToCart {
         }),
       });
 
-      if (!cartResponse.ok) return alert(cartResponse);
+      if (!cartResponse.ok) return console.log(cartResponse);
       const res = await cartResponse.json();
       console.log(res);
       return res;
@@ -68,8 +69,8 @@ class AddToCart {
     }
   }
   showSpinner(productButton) {
-    productButton.querySelector("a").classList.toggle("hidden");
-    productButton.querySelector(".lds-dual-ring").classList.toggle("hidden");
+    productButton.classList.toggle("hidden");
+    // productButton.querySelector(".lds-dual-ring").classList.toggle("hidden");
   }
 
   showSuccessMessage(productButton) {

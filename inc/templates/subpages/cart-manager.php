@@ -12,8 +12,15 @@
         <?php
         settings_fields('iucp_cart_manager_settings');
         do_settings_sections('itay_cart_manager');
-        submit_button();
         ?>
+        <div class="iucp-flex">
+          <?php
+          submit_button();
+          submit_button('Add Timezone', 'delete', 'button', 'true', array(
+            'id' => 'iucp-add-time-zone-button'
+          ));
+          ?>
+        </div>
       </form>
     </div>
   </div>

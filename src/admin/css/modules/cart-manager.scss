@@ -1,0 +1,19 @@
+.wrap.cart-manager {
+  .iucp-flex {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    &.iucp-flex-col {
+      flex-direction: column;
+    }
+    &.iucp-flex-reverse {
+      flex-direction: row-reverse;
+    }
+  }
+  .iucp-setting-container.text {
+    input {
+      width: fit-content;
+      margin-bottom: 1rem;
+    }
+  }
+}

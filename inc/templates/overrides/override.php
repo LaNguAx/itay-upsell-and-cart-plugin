@@ -21,12 +21,12 @@ if (!defined('ABSPATH')) {
 extract(Xoo_Wsc_Template_Args::cart_container());
 
 ?>
-
 <div class="xoo-wsc-container">
 
   <div class="xoo-wsc-basket">
 
     <?php if ($showCount === "yes") : ?>
+
       <span class="xoo-wsc-items-count"><?php echo xoo_wsc_cart()->get_cart_count() ?></span>
     <?php endif; ?>
 
@@ -36,9 +36,7 @@ extract(Xoo_Wsc_Template_Args::cart_container());
 
   </div>
 
-
   <div class="xoo-wsc-header">
-
     <?php do_action('xoo_wsc_header_start'); ?>
 
     <?php xoo_wsc_helper()->get_template('xoo-wsc-header.php'); ?>
@@ -47,9 +45,17 @@ extract(Xoo_Wsc_Template_Args::cart_container());
 
   </div>
 
+  <!-- Beginning of new code: -->
+  <?php
+  // To remove the cookie
+  // setcookie('iucp_session_address', '', time() - 8000, COOKIEPATH, COOKIE_DOMAIN);
 
-  <div class="xoo-wsc-body">
+  if (!isset($_COOKIE['iucp_session_address'])) {
+    do_action('iucp_initialize_address');
+  }
+  ?>
 
+  <div class="xoo-wsc-body <?php echo (!isset($_COOKIE['iucp_session_address']) ? 'hidden' : '');  ?>">
     <?php do_action('xoo_wsc_body_start'); ?>
 
     <?php xoo_wsc_helper()->get_template('xoo-wsc-body.php'); ?>
@@ -58,8 +64,8 @@ extract(Xoo_Wsc_Template_Args::cart_container());
 
   </div>
 
-  <div class="xoo-wsc-footer">
-
+  <div class="xoo-wsc-footer <?php echo (!isset($_COOKIE['iucp_session_address']) ? 'hidden' : '');  ?>">
+    <!-- End of new code -->
     <?php do_action('xoo_wsc_footer_start'); ?>
 
     <?php xoo_wsc_helper()->get_template('xoo-wsc-footer.php'); ?>

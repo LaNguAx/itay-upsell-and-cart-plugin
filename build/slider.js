@@ -2,189 +2,6 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./src/user/js/add-to-cart.js":
-/*!************************************!*\
-  !*** ./src/user/js/add-to-cart.js ***!
-  \************************************/
-/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-
-__webpack_require__.r(__webpack_exports__);
-class AddToCart {
-  #requestSent;
-  #productsContainer;
-  #fetchURL;
-  constructor() {
-    this.events();
-  }
-  events() {
-    window.addEventListener("DOMContentLoaded", () => {
-      this.initializeVariables();
-      this.#productsContainer.addEventListener("click", e => this.handleProductButtonClick(e));
-    });
-  }
-  initializeVariables() {
-    this.#productsContainer = document.querySelector(".iucp-products-container");
-    this.#requestSent = false;
-    this.#fetchURL = `${storeData.siteUrl}/wp-json/wc/store/v1/cart/add-item`;
-  }
-  async handleProductButtonClick(e) {
-    try {
-      e.preventDefault();
-      const target = e.target.closest(".product-button");
-      if (!target) return;
-      if (target.dataset.productType == "grouped") {
-        const groupedProducts = target.querySelector("a").href;
-        window.location.href = groupedProducts;
-        return;
-      }
-      if (this.#requestSent) return;
-      this.#requestSent = true;
-      this.showSpinner(target);
-      console.log(target.dataset.productId);
-      const response = await this.addProductToCart(target.dataset.productId);
-      this.showSpinner(target);
-      this.showSuccessMessage(target);
-    } catch (error) {
-      console.log(error);
-    }
-  }
-  async addProductToCart(productID) {
-    try {
-      const cartResponse = await fetch(this.#fetchURL, {
-        method: "POST",
-        credentials: "same-origin",
-        headers: {
-          "X-WC-Store-API-Nonce": storeData.nonce,
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          id: productID,
-          quantity: 1
-        })
-      });
-      if (!cartResponse.ok) return alert(cartResponse);
-      const res = await cartResponse.json();
-      console.log(res);
-      return res;
-    } catch (error) {
-      throw error;
-    }
-  }
-  showSpinner(productButton) {
-    productButton.querySelector("a").classList.toggle("hidden");
-    productButton.querySelector(".lds-dual-ring").classList.toggle("hidden");
-  }
-  showSuccessMessage(productButton) {
-    productButton.querySelector("a").classList.toggle("hidden");
-    productButton.querySelector(".add-to-cart-success").classList.toggle("hidden");
-    setTimeout(() => {
-      productButton.querySelector("a").classList.toggle("hidden");
-      productButton.querySelector(".add-to-cart-success").classList.toggle("hidden");
-      this.#requestSent = false;
-    }, 1000);
-  }
-}
-/* harmony default export */ __webpack_exports__["default"] = (AddToCart);
-
-// Code that is not structured in OOP.
-// let requestSent = false;
-// window.addEventListener("DOMContentLoaded", () => {
-//   const productsContainer = document.querySelector(".iucp-products-container");
-//   productsContainer.addEventListener("click", async function (e) {
-//     try {
-//       e.preventDefault();
-//       const target = e.target.closest(".product-button");
-//       if (!target) return;
-//       if (target.dataset.productType == "grouped") {
-//         const groupedProducts = target.querySelector("a").href;
-//         window.location.href = groupedProducts;
-//         return;
-//       }
-
-//       if (requestSent) return;
-//       requestSent = true;
-//       showSpinner(target);
-//       const response = await addProductToCart(target.dataset.productId, target);
-//       showSpinner(target);
-//       showSuccessMessage(target);
-//     } catch (error) {
-//       console.log(error);
-//     }
-//   });
-// });
-
-// async function addProductToCart(productID) {
-//   try {
-//     /**
-//      * This code becomes irrelevant after I figured out you can simply pass the variation ID (Which is technically a product ID) and that does all the logic for you, so you don't need to send an array of the variations, only variation ID.
-//      *
-//     const product = {
-//       id: productID,
-//       quantity: 1,
-//       variation: undefined,
-//     };
-//     // const productVariation = target.querySelector("#product-attributes")
-//     //   ? JSON.parse(target.querySelector("#product-attributes").value)
-//     //   : undefined;
-
-//     // if (productVariation) {
-//     //   let newVariation = [];
-//     //   for (const [key, val] of Object.entries(productVariation)) {
-//     //     newVariation.push({
-//     //       attribute: key,
-//     //       value: val,
-//     //     });
-//     //   }
-//     //   product.variation = newVariation;
-//     // } */
-//     const fetchUrl = `${storeData.siteUrl}/wp-json/wc/store/v1/cart/add-item`;
-//     const cartResponse = await fetch(fetchUrl, {
-//       method: "POST",
-//       credentials: "same-origin",
-//       headers: {
-//         "X-WC-Store-API-Nonce": storeData.nonce,
-//         "Content-Type": "application/json",
-//       },
-//       body: JSON.stringify({
-//         id: productID,
-//         quantity: 1,
-//       }),
-//     });
-
-//     if (!cartResponse.ok) return alert(cartResponse);
-//     const res = await cartResponse.json();
-//     return res;
-//   } catch (error) {
-//     throw error;
-//     console.log(error);
-//   }
-// }
-
-// function showSpinner(target) {
-//   const productButton = target;
-//   productButton.querySelector("a").classList.toggle("hidden");
-//   productButton.querySelector(".lds-dual-ring").classList.toggle("hidden");
-// }
-
-// function showSuccessMessage(target) {
-//   const productButton = target;
-//   productButton.querySelector("a").classList.toggle("hidden");
-//   productButton
-//     .querySelector(".add-to-cart-success")
-//     .classList.toggle("hidden");
-
-//   setTimeout(() => {
-//     productButton.querySelector("a").classList.toggle("hidden");
-//     productButton
-//       .querySelector(".add-to-cart-success")
-//       .classList.toggle("hidden");
-
-//     requestSent = false;
-//   }, 1000);
-// }
-
-/***/ }),
-
 /***/ "./node_modules/@glidejs/glide/dist/glide.esm.js":
 /*!*******************************************************!*\
   !*** ./node_modules/@glidejs/glide/dist/glide.esm.js ***!
@@ -4139,9 +3956,8 @@ var __webpack_exports__ = {};
   \*******************************/
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _glidejs_glide__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @glidejs/glide */ "./node_modules/@glidejs/glide/dist/glide.esm.js");
-/* harmony import */ var _add_to_cart_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./add-to-cart.js */ "./src/user/js/add-to-cart.js");
 
-
+// import AddToCart from "./add-to-cart";
 class Slider {
   #mainCategorySlider;
   #productsSliders;
@@ -4159,24 +3975,25 @@ class Slider {
     });
   }
   initializeVariables() {
-    this.#mainCategorySlider = document.querySelector(".glide.iucp-upsell-categories-container");
+    this.#mainCategorySlider = document.querySelector(".iucp-upsell-categories-container");
     this.#productsSliders = document.querySelectorAll(".glide.iucp-upsell-products-container");
     this.#productsSlidersContainer = document.querySelector(".icup-products-container");
   }
   initializeSliders() {
     // Categories
-    new _glidejs_glide__WEBPACK_IMPORTED_MODULE_0__["default"](".glide.iucp-upsell-slider", {
+    new _glidejs_glide__WEBPACK_IMPORTED_MODULE_0__["default"](".iucp-upsell-slider", {
       type: "carousel",
+      direction: "rtl",
       perView: 4,
       gap: 15
     }).mount();
-
     // Products
     document.body.append(this.#productsSlidersContainer);
     this.#productsSliders.forEach(slider => {
       const sliderName = slider.getAttribute("id").split("_").slice(1)[0];
       new _glidejs_glide__WEBPACK_IMPORTED_MODULE_0__["default"](`.glide.iucp-upsell-slider.${sliderName}`, {
         type: "carousel",
+        direction: "rtl",
         perView: 4,
         gap: 15
       }).mount();
@@ -4228,100 +4045,7 @@ class Slider {
 
 // Initialize functionalities.
 const slider = new Slider();
-const addToCart = new _add_to_cart_js__WEBPACK_IMPORTED_MODULE_1__["default"]();
-
-// Old not OOP code.
-// window.addEventListener("DOMContentLoaded", function (e) {
-//   // Categories sliders start.
-//   const mainCategorySlider = document.querySelector(
-//     ".glide.iucp-upsell-categories-container"
-//   );
-
-//   if (mainCategorySlider) {
-//     mainCategorySlider.addEventListener("click", function (e) {
-//       // e.preventDefault();
-//       handleCategorySliderClick(e);
-//     });
-//     new Glide(".glide.iucp-upsell-slider", {
-//       type: "carousel",
-//       perView: 4,
-//       gap: 15,
-//     }).mount();
-//   }
-//   // Categories slider end.
-
-//   //Products sliders start
-//   const productsSliders = document.querySelectorAll(
-//     ".glide.iucp-upsell-products-container"
-//   );
-//   const productsSlidersContainer = document.querySelector(
-//     ".icup-products-container"
-//   );
-//   document.body.append(productsSlidersContainer);
-//   if (productsSliders) {
-//     productsSliders.forEach((slider) => {
-//       const sliderName = slider.getAttribute("id").split("_").slice(1)[0];
-//       new Glide(`.glide.iucp-upsell-slider.${sliderName}`, {
-//         type: "carousel",
-//         perView: 4,
-//         gap: 15,
-//       }).mount();
-//     });
-//   }
-//   // Products sliders end
-// });
-
-// function handleCategorySliderClick(e) {
-//   const target = e.target.closest("li");
-//   if (!target) return;
-
-//   const clickedCategory = target.querySelector("a").getAttribute("href");
-//   showClickedCategory(clickedCategory.slice(1));
-// }
-
-// function showClickedCategory(sliderName) {
-//   generateOverlay();
-//   const clickedSlider = document.querySelector(
-//     `#iucp-upsell-products-container_${sliderName}`
-//   );
-//   clickedSlider.classList.add("active");
-// }
-
-// function generateOverlay() {
-//   const overlay = document.createElement("div");
-//   overlay.classList.add("iucp-upsell-overlay");
-//   document.body.appendChild(overlay);
-
-//   setTimeout(() => {
-//     overlay.classList.add("active");
-//   }, 50);
-//   toggleOverflow(true);
-
-//   overlay.addEventListener("click", function (e) {
-//     overlay.classList.remove("active");
-//     setTimeout(() => {
-//       overlay.remove();
-//     }, 200);
-//     toggleOverflow(false);
-//     hideAllProductSliders();
-//   });
-// }
-
-// function toggleOverflow(state) {
-//   if (state) {
-//     document.body.style.overflow = "hidden";
-//     return;
-//   }
-//   document.body.style.overflow = "auto";
-//   return;
-// }
-
-// function hideAllProductSliders() {
-//   const productsSliders = document.querySelectorAll(
-//     ".glide.iucp-upsell-products-container"
-//   );
-//   productsSliders.forEach((slider) => slider.classList.remove("active"));
-// }
+// const addToCart = new AddToCart();
 }();
 /******/ })()
 ;

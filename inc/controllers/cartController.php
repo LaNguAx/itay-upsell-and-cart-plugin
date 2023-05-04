@@ -12,10 +12,7 @@ use Inc\Apis\Settings;
 use Inc\Callbacks\CartCallbacks;
 use Inc\Controllers\BaseController;
 use Inc\Callbacks\TemplatesCallbacks;
-use WC_DateTime;
-use WC_Shipping_Zones;
 
-use function PHPSTORM_META\type;
 
 class CartController extends BaseController {
 
@@ -38,73 +35,94 @@ class CartController extends BaseController {
     $this->setSections();
     $this->setFields();
 
-    add_filter('woocommerce_states', array($this, 'custom_woocommerce_states'));
-    add_filter('woocommerce_checkout_fields', array($this, 'updateShippingFields'));
-
-    add_action('wp_enqueue_scripts', array($this, 'load_scripts'));
-    add_action('wp_ajax_iucp_create_date_time', array($this, 'handleAjax'));
-    add_action('wp_ajax_nopriv_iucp_create_date_time', array($this, 'handleAjax'));
-    if (!isset($_COOKIE['iucp_session_address']))
-      add_action('iucp_initialize_address', array($this, 'loadCartAddress'));
+    $this->initiateHooks();
 
     $this->settings->setSubPages($this->subpages)->register();
   }
 
-  public function updateShippingFields($fields) {
+  public function initiateHooks() {
+    // seperate module
+    // add_filter('woocommerce_states', array($this, 'custom_woocommerce_states'));
+    // add_filter('woocommerce_checkout_fields', array($this, 'updateShippingFields'));
+
+    add_action('wp_enqueue_scripts', array($this, 'load_scripts'));
+
+    add_action('wp_ajax_iucp_create_date_time', array($this, 'handleAjax'));
+
+    add_action('wp_ajax_nopriv_iucp_create_date_time', array($this, 'handleAjax'));
+
     if (!isset($_COOKIE['iucp_session_address']))
-      return $fields;
+      add_action('iucp_initialize_address', array($this, 'loadCartAddress'));
 
-    // Continue from here.
-    $iucp_data = json_decode(stripslashes($_COOKIE['iucp_session_address']), true);
-
-    $fields['shipping']['delivery_time'] = array(
-      'type' => 'select',
-      'label' => 'Delivery Time',
-      'required' => true,
-      'placeholder' => 'Delivery Time',
-      'options' => array(
-        'option_1' => $iucp_data['arrival_time'],
-      ),
-      'class'     => array('form-row-wide', 'update_totals_on_change'),
-    );
-    $fields['shipping']['location'] = array(
-      'type' => 'text',
-      'label' => 'Location',
-      'required' => true,
-      'placeholder' => 'Location',
-      'default' => $iucp_data['arrival_location'],
-      'class'     => array('form-row-wide', 'update_totals_on_change'),
-    );
-    $fields['shipping']['arrival_date'] = array(
-      'type' => 'text',
-      'label' => 'Arrival Date',
-      'readonly' => true,
-      'placeholder' => 'Arrival Date',
-      'default' => $iucp_data['arrival_date'],
-      'custom_attributes' => array(
-        'readonly' => 'readonly'
-      ),
-      'class'     => array('form-row-wide', 'update_totals_on_change'),
-    );
-
-    // continue here updating the fields 
-    $fields['shipping']['shipping_state']['class'][] = 'update_totals_on_change';
-    return $fields;
+    add_filter('xoo_side-cart-woocommerce_template_located', array($this, 'replaceTemplate'), 10, 2);
   }
 
-  function custom_woocommerce_states($states) {
+  public function replaceTemplate($template, $template_name) {
 
-    $states['IL'] = array(
-      'IL1' => 'רחובות',
-      'IL2' => 'קריית עקרון',
-      'IL3' => 'נס ציונה',
-      'IL4' => 'ראשון לציון',
-      'IL5' => 'יבנה',
-      'IL6' => 'באר יעקב'
-    );
+    if ($template_name == 'xoo-wsc-container.php') {
+      $template =  $this->plugin_path . 'inc/templates/overrides/override.php';
 
-    return $states;
+      return $template;
+    }
+    return $template;
   }
+
+  // Move this to a seperate module.
+  // public function updateShippingFields($fields) {
+  //   if (!isset($_COOKIE['iucp_session_address']))
+  //     return $fields;
+
+  //   $iucp_data = json_decode(stripslashes($_COOKIE['iucp_session_address']), true);
+
+
+  //   $fields['shipping']['delivery_time'] = array(
+  //     'type' => 'select',
+  //     'label' => 'Delivery Time',
+  //     'required' => true,
+  //     'placeholder' => 'Delivery Time',
+  //     'options' => array(
+  //       'option_1' => $iucp_data['arrival_time'],
+  //     ),
+  //     'class'     => array('form-row-wide', 'update_totals_on_change'),
+  //   );
+  //   $fields['shipping']['location'] = array(
+  //     'type' => 'text',
+  //     'label' => 'Location',
+  //     'required' => true,
+  //     'placeholder' => 'Location',
+  //     'default' => $iucp_data['arrival_location'],
+  //     'class'     => array('form-row-wide', 'update_totals_on_change'),
+  //   );
+  //   $fields['shipping']['arrival_date'] = array(
+  //     'type' => 'text',
+  //     'label' => 'Arrival Date',
+  //     'readonly' => true,
+  //     'placeholder' => 'Arrival Date',
+  //     'default' => $iucp_data['arrival_date'],
+  //     'custom_attributes' => array(
+  //       'readonly' => 'readonly'
+  //     ),
+  //     'class'     => array('form-row-wide', 'update_totals_on_change'),
+  //   );
+
+  //   // continue here updating the fields 
+  //   $fields['shipping']['shipping_state']['class'][] = 'update_totals_on_change';
+  //   return $fields;
+  // }
+
+  // function custom_woocommerce_states($states) {
+
+  //   $states['IL'] = array(
+  //     'IL1' => 'רחובות',
+  //     'IL2' => 'קריית עקרון',
+  //     'IL3' => 'נס ציונה',
+  //     'IL4' => 'ראשון לציון',
+  //     'IL5' => 'יבנה',
+  //     'IL6' => 'באר יעקב'
+  //   );
+
+  //   return $states;
+  // }
 
 
   public function handleAjax() {
@@ -113,7 +131,7 @@ class CartController extends BaseController {
 
     if (isset($_COOKIE['iucp_session_address'])) {
       echo json_encode(array(
-        'error' => 'invalid request, user already has cookies'
+        'error' => 'Dont get smart with me'
       ));
       die();
     }
@@ -124,8 +142,8 @@ class CartController extends BaseController {
       'arrival_location' => $_POST['iucp_address_location'],
 
     );
-    // $json = wp_json_encode($session_address, JSON_UNESCAPED_SLASHES);
-    // To load the cookie !
+
+    // Loading a cookie on the user
     setcookie('iucp_session_address', json_encode($session_address), time() + 7200, COOKIEPATH, COOKIE_DOMAIN);
     echo json_encode($session_address['arrival_date']);
     die();
@@ -137,41 +155,14 @@ class CartController extends BaseController {
     wp_enqueue_style('jquery-ui');
     wp_enqueue_style('user-styles-css', $this->plugin_url . '/build/userstyles.scss.css');
 
-    wp_localize_script('cart-js', 'iucpTimes', array(
-      '09:00' => '12:00',
-      '12:00' => '15:00',
-      '15:00' => '18:00',
-      '18:00' => '21:00',
-    ));
+
+    $time_zones = get_option('iucp_cart_manager_options')['iucp_cart_time_zones'];
+
+    wp_localize_script('cart-js', 'iucpTimes', $time_zones);
   }
 
   public function loadCartAddress() {
-    $shipping_zones = WC_Shipping_Zones::get_zones();
-?>
-    <div class="iucp-address-container">
-      <form autocomplete="off" id="iucp_form" action="#" method="post" data-url="<?php echo admin_url('admin-ajax.php'); ?>">
-        <label for="iucp_address_location"><?php echo __('Location', 'woocommerce') ?></label>
-        <input required list="iucp_address_locations" id="hoepkao" name="iucp_address_location">
-        <datalist id="iucp_address_locations">
-          <?php
-          foreach ($shipping_zones as $zone) {
-            echo '<option>' . $zone['zone_name'] . '</option>';
-          }
-          ?>
-        </datalist>
-        <label for="iucp_address_date"><?php echo __('Date', 'woocommerce') ?></label>
-        <input required id="iucp_datepicker" type="text" name="iucp_address_arrival_date">
-        <label id="arrival-time-label" class="hidden" for="iucp_address_arrival_time"><?php echo __('Delivery', 'woocommerce') ?></label>
-        <?php $current_time = strtotime(wp_date('H:i')); ?>
-        <select id="iucp_address_arrival_time" name="iucp_address_arrival_time" class="hidden"> </select>
-        <input type="hidden" name="action" value="iucp_create_date_time">
-        <?php wp_nonce_field('iucp_time', 'iucp_date_time'); ?>
-
-        <input id="iucp_submit_address_button" type="submit" name="iucp_submit_address_button" value="1">
-        <label id="iucp-label-submit" for="iucp_submit_address_button"><?php echo __('Add To Cart', 'woocommerce') ?></label>
-      </form>
-    </div>
-<?php
+    require_once $this->plugin_path  . '/inc/templates/features/cart-feature.php';
   }
 
 
@@ -213,14 +204,16 @@ class CartController extends BaseController {
   public function setFields() {
     $fields = array(
       array(
-        'id' => 'iucp_cart_header',
-        'title' => 'Cart Header',
-        'callback' => array($this->cart_callbacks, 'textOptionsField'),
+        'id' => 'iucp_cart_time_zones',
+        'title' => 'Time Zones',
+        'callback' => array($this->cart_callbacks, 'timeZonesOptionsField'),
         'page' => 'itay_cart_manager',
         'section' => 'iucp_cart_manager_index',
         'args' => array(
           'option_name' => 'iucp_cart_manager_options',
-          'feature_name' => 'iucp_cart_header',
+          'feature_name' => 'iucp_cart_time_zones',
+          'placeholder' => 'hh:mm',
+          'description' => "hh:mm -> example: <strong>14:22</strong>"
         ),
       )
     );

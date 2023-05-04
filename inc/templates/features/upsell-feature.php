@@ -5,6 +5,7 @@ $products_within_categories = array();
 $iucp_upsell_products = get_option('iucp_upsell_products');
 $iucp_upsell_options = get_option('iucp_upsell_manager_options');
 
+
 foreach ($iucp_upsell_products as $category => $product) {
   $product_categories[] = $category;
   $products_within_categories[$category] = $product;
@@ -20,8 +21,6 @@ if (!$iucp_upsell_products) return;
     <h5 class="iucp-upsell-subheading" style="color: <?php echo (isset($iucp_upsell_options['iucp_upsell_subheading_text_color']) ? $iucp_upsell_options['iucp_upsell_subheading_text_color'] : '') ?>"><?php echo isset($iucp_upsell_options['iucp_upsell_subheading']) ? $iucp_upsell_options['iucp_upsell_subheading'] : '' ?></h5>
   </div>
   <div id="iucp-upsell-main-category-container" class="glide iucp-upsell-categories-container">
-    <h4></h4>
-    <h5></h5>
     <div class="glide iucp-upsell-slider">
       <div class="glide__track" data-glide-el="track">
         <ul class="glide__slides">

@@ -24,6 +24,7 @@ class TemplatesCallbacks extends BaseController {
 
   public function generateCartPage() {
     wp_enqueue_style('admin-css', $this->plugin_url . 'build/adminstyles.scss.css', 1.0);
+    wp_enqueue_script('cart-manager-js', $this->plugin_url . 'build/cart-manager.js');
     return require_once($this->plugin_path . 'inc/templates/subpages/cart-manager.php');
   }
 }

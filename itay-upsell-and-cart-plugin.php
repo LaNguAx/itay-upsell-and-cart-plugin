@@ -6,7 +6,7 @@
 
 
 /*
-Plugin Name: Itay Upsell & Cart Plugin
+Plugin Name: Itay Upsell & Cart Plugin Current
 Plugin URI: https://github.com/LaNguAx/itay-upsell-and-cart-plugin
 Description: A plugin that gives the store owner a feature to output a new products slider at the product page to increase sales. Also implements a dynamic cart.
 Version: 1.0.0

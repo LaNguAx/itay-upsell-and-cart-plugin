@@ -176,4 +176,21 @@ div.ui-toggle.mb-10 {
   gap: 2rem;
 }
 
+.wrap.cart-manager .iucp-flex {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.wrap.cart-manager .iucp-flex.iucp-flex-col {
+  flex-direction: column;
+}
+.wrap.cart-manager .iucp-flex.iucp-flex-reverse {
+  flex-direction: row-reverse;
+}
+.wrap.cart-manager .iucp-setting-container.text input {
+  width: -moz-fit-content;
+  width: fit-content;
+  margin-bottom: 1rem;
+}
+
 /*# sourceMappingURL=adminstyles.scss.css.map*/
