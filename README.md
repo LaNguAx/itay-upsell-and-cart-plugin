@@ -42,7 +42,7 @@ If you encounter any issues with Itay's Upsell & Cart Time Zones plugin, you can
 
 # License
 
-Copyright (c) <2023> Itay Andre Aknin
+Copyright (c) 2023 Itay Andre Aknin
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
