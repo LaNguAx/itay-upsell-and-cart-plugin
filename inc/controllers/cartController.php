@@ -157,7 +157,6 @@ class CartController extends BaseController {
 
 
     $time_zones = get_option('iucp_cart_manager_options')['iucp_cart_time_zones'];
-
     wp_localize_script('cart-js', 'iucpTimes', $time_zones);
   }
 
