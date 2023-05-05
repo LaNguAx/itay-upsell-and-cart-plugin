@@ -28,7 +28,8 @@ class CartCallbacks {
 ?>
     <div id="<?php echo $feature ?>" class="iucp-setting-container text">
       <?php
-      foreach ($option_value as $start_time => $end_time) {
+      foreach ($option_value as $start_time => $time_zone_data) {
+        $end_time =  $time_zone_data['end_time'];
       ?>
         <div class="iucp-time-zone-container iucp-flex ">
           <div class="iucp-flex">
@@ -38,10 +39,35 @@ class CartCallbacks {
             </div>
             <div class="iucp-flex iucp-flex-col">
               <label for="end-time">End Time</label>
-              <input type="time" min="<?php echo $start_time ?>" max="<?php echo $end_time ?>" id="end-time" class="iucp-time-zone-input regular-text" name="<?php echo $option_name . '[' . $feature . '][' . $start_time . ']' ?>" value="<?php echo $end_time ?>" placeholder="<?php echo $placeholder ?>">
+              <input type="time" min="<?php echo $start_time ?>" max="<?php echo $end_time ?>" id="end-time" class="iucp-time-zone-input regular-text" name="<?php echo $option_name . '[' . $feature . '][' . $start_time . '][end_time]' ?>" value="<?php echo $end_time ?>" placeholder="<?php echo $placeholder ?>">
+            </div>
+            <div id="iucp_days_of_week" class="iucp-flex">
+              <?php
+              $days_of_week = array(
+                'sunday',
+                'monday',
+                'tuesday',
+                'wednesday',
+                'thursday',
+                'friday',
+                'saturday'
+              );
+
+              $days_selected = isset($option_value[$start_time]['days']) ? $option_value[$start_time]['days'] : false;
+
+              foreach ($days_of_week as $day) {
+              ?>
+                <div class="iucp-flex iucp-flex-col">
+                  <label for="iucp_day_<?php echo $day ?>"><?php echo $day ?></label>
+
+                  <input type="checkbox" name="<?php echo $option_name . '[' . $feature . '][' . $start_time . '][days][' . $day . ']' ?>" id="iucp_day_<?php echo $day ?>" class="iucp_day_of_week" value="1" <?php echo (isset($days_selected[$day]) ? 'checked' : '') ?>>
+                </div>
+              <?php
+              }
+              ?>
             </div>
           </div> <label style="display: inline-block; margin-right: 2rem;" for="iucp-time-zone-input"><?php echo $description ?></label>
-          <?php submit_button('X', 'delete iucp-flex', 'button', false, array(
+          <?php submit_button('DELETE', 'delete iucp-flex', 'button', false, array(
             'id' => 'iucp-delete-time-zone-button',
             'style' => 'margin-top: auto;'
           )) ?>

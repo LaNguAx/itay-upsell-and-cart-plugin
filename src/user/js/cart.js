@@ -5,6 +5,7 @@ class Cart {
   #userTime;
   #siteTimes;
   #todaySelected;
+  #daySelected;
   #instantiated;
   #timeReducer = 1;
   #data = {
@@ -34,6 +35,19 @@ class Cart {
         this.#data.date = new Date(dateText).getDate();
         const currentDate = new Date().getDate();
         this.#todaySelected = this.#data.date == currentDate ? true : false;
+
+        const days = [
+          "sunday",
+          "monday",
+          "tuesday",
+          "wednesday",
+          "thursday",
+          "friday",
+          "saturday",
+        ];
+
+        this.#daySelected =
+          days[jQuery(this.#datePicker).datepicker("getDate").getDay()];
 
         // show time selector.
         this.showTimeSelector();
@@ -70,18 +84,29 @@ class Cart {
     );
 
     this.#userTime = newUserTime;
-
-    for (const [start, end] of Object.entries(this.#siteTimes)) {
+    console.log(this.#siteTimes);
+    let foundTimeZones = 0;
+    for (const [start, timeZoneData] of Object.entries(this.#siteTimes)) {
       if (this.#todaySelected) {
         if (this.#userTime < start) {
-          this.#timePicker[0].innerHTML += `<option>${start}:${end}</option>`;
+          this.#timePicker[0].innerHTML += `<option>${start}:${timeZoneData.end_time}</option>`;
+        } else {
+          this.#timePicker[0].innerHTML = `<option>Deliveries on ${
+            this.#daySelected
+          } are over.</option>`;
+          return;
         }
-      } else {
-        this.#timePicker[0].innerHTML += `<option>${start}:${end}</option>`;
+      }
+      if (timeZoneData.days[this.#daySelected]) {
+        foundTimeZones++;
+        this.#timePicker[0].innerHTML += `<option>${start}:${timeZoneData.end_time}</option>`;
       }
     }
+    if (!foundTimeZones)
+      this.#timePicker[0].innerHTML = `<option>We are not doing deliveries on ${
+        this.#daySelected
+      }</option>`;
   }
-
   submitForm() {
     //rendering a spinner
     const url = this.#form.attr("data-url");
@@ -129,6 +154,7 @@ class Cart {
     this.#datePicker = jQuery("#iucp_datepicker").datepicker({
       dateFormat: "mm-dd-yy",
       minDate: 0,
+      firstDay: 0,
       beforeShowDay: (date) => {
         return [
           date.getDay() == 0 ||
@@ -136,7 +162,8 @@ class Cart {
             date.getDay() == 2 ||
             date.getDay() == 3 ||
             date.getDay() == 4 ||
-            date.getDay() == 5,
+            date.getDay() == 5 ||
+            date.getDay() == 6,
         ];
       },
       beforeShow: function (input, inst) {

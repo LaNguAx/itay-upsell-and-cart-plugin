@@ -38,10 +38,10 @@ class Activate {
     if (!get_option('iucp_cart_manager_options')) {
       $defaults = array(
         'iucp_cart_time_zones' => array(
-          '09:00' => '12:00',
-          '12:00' => '15:00',
-          '15:00' => '18:00',
-          '18:00' => '21:00',
+          '09:00' => array('end_time' => '12:00', 'days' => array()),
+          '12:00' => array('end_time' => '15:00', 'days' => array()),
+          '15:00' => array('end_time' => '18:00', 'days' => array()),
+          '18:00' => array('end_time' => '21:00', 'days' => array()),
         )
       );
       update_option('iucp_cart_manager_options', $defaults);

@@ -59,7 +59,12 @@ class CartManager {
     element.setAttribute("value", element.value);
     const startTime = parent.querySelector("#start-time").value;
     parent.querySelectorAll(".iucp-time-zone-input").forEach(element => {
-      element.setAttribute("name", `iucp_cart_manager_options[iucp_cart_time_zones][${startTime}]`);
+      if (element.id === "start-time") {
+        element.setAttribute("name", `iucp_cart_manager_options[iucp_cart_time_zones][${startTime}]`);
+      }
+      if (element.id === "end-time") {
+        element.setAttribute("name", `iucp_cart_manager_options[iucp_cart_time_zones][${startTime}][end_time]`);
+      }
     });
     if (element.id === "start-time") {
       parent.querySelector("#end-time").setAttribute("min", element.value);
