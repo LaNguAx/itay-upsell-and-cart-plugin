@@ -3980,11 +3980,13 @@ class Slider {
     this.#productsSlidersContainer = document.querySelector(".icup-products-container");
   }
   initializeSliders() {
+    // change it to a number because glidejs breaks if perView number is passed as string.. good but unpredictable library sometimes.
+    const itemsPerView = Number(this.#mainCategorySlider.dataset.productsPerView);
     // Categories
     new _glidejs_glide__WEBPACK_IMPORTED_MODULE_0__["default"](".iucp-upsell-slider", {
       type: "carousel",
       direction: "rtl",
-      perView: 4,
+      perView: itemsPerView,
       gap: 15
     }).mount();
     // Products
@@ -3994,7 +3996,7 @@ class Slider {
       new _glidejs_glide__WEBPACK_IMPORTED_MODULE_0__["default"](`.glide.iucp-upsell-slider.${sliderName}`, {
         type: "carousel",
         direction: "rtl",
-        perView: 4,
+        perView: itemsPerView,
         gap: 15
       }).mount();
     });

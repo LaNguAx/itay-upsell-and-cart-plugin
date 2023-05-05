@@ -20,7 +20,7 @@ if (!$iucp_upsell_products) return;
     <h4 class="iucp-upsell-heading" style="color: <?php echo (isset($iucp_upsell_options['iucp_upsell_heading_text_color']) ? $iucp_upsell_options['iucp_upsell_heading_text_color'] : '') ?>"><?php echo isset($iucp_upsell_options['iucp_upsell_heading']) ? $iucp_upsell_options['iucp_upsell_heading'] : '' ?></h4>
     <h5 class="iucp-upsell-subheading" style="color: <?php echo (isset($iucp_upsell_options['iucp_upsell_subheading_text_color']) ? $iucp_upsell_options['iucp_upsell_subheading_text_color'] : '') ?>"><?php echo isset($iucp_upsell_options['iucp_upsell_subheading']) ? $iucp_upsell_options['iucp_upsell_subheading'] : '' ?></h5>
   </div>
-  <div id="iucp-upsell-main-category-container" class="glide iucp-upsell-categories-container">
+  <div id="iucp-upsell-main-category-container" class="glide iucp-upsell-categories-container" data-products-per-view="<?php echo $iucp_upsell_options['iucp_upsell_slider_items_per_view'] ?>">
     <div class="glide iucp-upsell-slider">
       <div class="glide__track" data-glide-el="track">
         <ul class="glide__slides">
@@ -52,8 +52,8 @@ if (!$iucp_upsell_products) return;
   <?php
   foreach ($products_within_categories as $category => $products) {
   ?>
-    <div id="iucp-upsell-products-container_<?php echo $category ?>" class="glide iucp-upsell-products-container">
-      <div class="glide iucp-upsell-slider <?php echo $category ?>">
+    <div id="iucp-upsell-products-container_<?php echo $category ?>" class="glide iucp-upsell-products-container" data-products-per-view="<?php echo $iucp_upsell_options['iucp_upsell_slider_items_per_view'] ?>">
+      <div class=" glide iucp-upsell-slider <?php echo $category ?>">
         <div class="glide__track" data-glide-el="track">
           <ul class="glide__slides">
             <?php

@@ -2,6 +2,7 @@ class CartManager {
   #timeZonesContainer;
   #timeZonesInputs;
   #addTimeZoneBtn;
+  #deleteTimeZoneBtn;
   constructor() {
     window.addEventListener("DOMContentLoaded", () => {
       this.initializeVariables();
@@ -9,9 +10,18 @@ class CartManager {
     });
   }
   events() {
+    // add time zone
     this.#addTimeZoneBtn.addEventListener("click", (e) => {
       e.preventDefault();
       this.addTimeZone();
+    });
+
+    // delete time zone
+    this.#timeZonesContainer.addEventListener("click", (e) => {
+      const target = e.target.closest("#iucp-delete-time-zone-button");
+      if (!target) return;
+      e.preventDefault();
+      this.deleteTimeZone(target);
     });
 
     // Time change
@@ -24,7 +34,6 @@ class CartManager {
 
   timeChanged(element) {
     const parent = element.parentElement.parentElement;
-    console.log(parent);
     element.setAttribute("value", element.value);
     const startTime = parent.querySelector("#start-time").value;
     parent.querySelectorAll(".iucp-time-zone-input").forEach((element) => {
@@ -42,10 +51,15 @@ class CartManager {
   }
   initializeVariables() {
     this.#timeZonesContainer = document.querySelector("#iucp_cart_time_zones");
-    this.#addTimeZoneBtn = document.querySelector("#iucp-add-time-zone-button");
 
     this.#timeZonesInputs = this.#timeZonesContainer.querySelectorAll(
       ".iucp-time-zone-input"
+    );
+
+    this.#addTimeZoneBtn = document.querySelector("#iucp-add-time-zone-button");
+
+    this.#deleteTimeZoneBtn = document.querySelector(
+      "#iucp-delete-time-zone-button"
     );
   }
 
@@ -63,6 +77,9 @@ class CartManager {
 
       element.addEventListener("input", () => this.timeChanged(element));
     });
+  }
+  deleteTimeZone(target) {
+    target.closest(".iucp-time-zone-container").remove();
   }
 }
 export default new CartManager();

@@ -30,7 +30,7 @@ class Activate {
         'iucp_upsell_product_button_background_color' => '#add8e6',
         'iucp_upsell_category_button_text_color' => '#ffffff',
         'iucp_upsell_product_button_text_color' => '#ffffff',
-        'iucp_product_add_to_cart_success' => 'Item Added To Cart!'
+        'iucp_upsell_slider_items_per_view' => 3
       );
 
       update_option('iucp_upsell_manager_options', $defaults);

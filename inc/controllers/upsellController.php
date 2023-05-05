@@ -150,6 +150,19 @@ class UpsellController extends BaseController {
         )
       ),
       array(
+        'id' => 'iucp_upsell_slider_items_per_view',
+        'title' => 'Upsell Slider Items Per View',
+        'callback' => array($this->upsell_callbacks, 'numberOptionsField'),
+        'page' => 'itay_upsell_manager#tab-3',
+        'section' => 'iucp_upsell_manager_options',
+        'args' => array(
+          'option_name' => 'iucp_upsell_manager_options',
+          'feature_name' => 'iucp_upsell_slider_items_per_view',
+          'placeholder' => 'Choose the number of products viewable on the slider.<br>Minimum: 3 products',
+        )
+      ),
+
+      array(
         'id' => 'upsell_category_button_text',
         'title' => 'Category Button Text',
         'callback' => array($this->upsell_callbacks, 'textOptionsField'),
@@ -171,18 +184,6 @@ class UpsellController extends BaseController {
           'option_name' => 'iucp_upsell_manager_options',
           'feature_name' => 'iucp_product_button_text',
           'placeholder' => 'Create concise button product text. <br> Default: Add To Cart'
-        )
-      ),
-      array(
-        'id' => 'upsell_add_to_cart_success',
-        'title' => 'Product Added To Cart Message',
-        'callback' => array($this->upsell_callbacks, 'textOptionsField'),
-        'page' => 'itay_upsell_manager#tab-3',
-        'section' => 'iucp_upsell_manager_options',
-        'args' => array(
-          'option_name' => 'iucp_upsell_manager_options',
-          'feature_name' => 'iucp_product_add_to_cart_success',
-          'placeholder' => 'Create concise successful add to cart message. <br> Default: Item Added To Cart!'
         )
       ),
       array(

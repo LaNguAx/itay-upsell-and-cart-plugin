@@ -31,11 +31,15 @@ class Slider {
     );
   }
   initializeSliders() {
+    // change it to a number because glidejs breaks if perView number is passed as string.. good but unpredictable library sometimes.
+    const itemsPerView = Number(
+      this.#mainCategorySlider.dataset.productsPerView
+    );
     // Categories
     new Glide(".iucp-upsell-slider", {
       type: "carousel",
       direction: "rtl",
-      perView: 4,
+      perView: itemsPerView,
       gap: 15,
     }).mount();
     // Products
@@ -45,7 +49,7 @@ class Slider {
       new Glide(`.glide.iucp-upsell-slider.${sliderName}`, {
         type: "carousel",
         direction: "rtl",
-        perView: 4,
+        perView: itemsPerView,
         gap: 15,
       }).mount();
     });

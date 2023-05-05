@@ -69,7 +69,7 @@ class UpsellCallbacks {
       'iucp_upsell_product_button_background_color' => '#add8e6',
       'iucp_upsell_category_button_text_color' => '#ffffff',
       'iucp_upsell_product_button_text_color' => '#ffffff',
-      'iucp_product_add_to_cart_success' => 'Item Added To Cart!'
+      'iucp_upsell_slider_items_per_view' => 3
     );
     if ($_POST['submit'] === 'Reset') {
       return $defaults;
@@ -130,7 +130,19 @@ class UpsellCallbacks {
       </div>
     </div>
 
-<?php
+  <?php
 
+  }
+
+  public function numberOptionsField($args) {
+    $option_name = $args['option_name'];
+    $feature_name = $args['feature_name'];
+    $placeholder = $args['placeholder'];
+  ?>
+    <div class="iucp-setting-container">
+      <input type="number" name="<?php echo $option_name . '[' . $feature_name . ']' ?>" id="<?php echo $feature_name ?>" min="3" value="<?php echo get_option($option_name)[$feature_name] ?>">
+      <p><?php echo $placeholder  ?></p>
+    </div>
+<?php
   }
 }

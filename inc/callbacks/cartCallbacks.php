@@ -41,7 +41,10 @@ class CartCallbacks {
               <input type="time" min="<?php echo $start_time ?>" max="<?php echo $end_time ?>" id="end-time" class="iucp-time-zone-input regular-text" name="<?php echo $option_name . '[' . $feature . '][' . $start_time . ']' ?>" value="<?php echo $end_time ?>" placeholder="<?php echo $placeholder ?>">
             </div>
           </div> <label style="display: inline-block; margin-right: 2rem;" for="iucp-time-zone-input"><?php echo $description ?></label>
-
+          <?php submit_button('X', 'delete iucp-flex', 'button', false, array(
+            'id' => 'iucp-delete-time-zone-button',
+            'style' => 'margin-top: auto;'
+          )) ?>
           <br>
         </div>
 
