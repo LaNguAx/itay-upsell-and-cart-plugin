@@ -16,19 +16,19 @@ The Upsell feature displays a dynamic category slider on each product page. Stor
 
 To enable the Upsell feature, toggle the button in the plugin's dashboard, choose the available categories from which store owners can select products to showcase, and customize the feature's UI according to your brand's style and design.
 
-### Cart Time Zones Container
+### Cart Time Zones Feature
 
-The Cart Time Zones Container feature allows store owners' clients to choose their location, date, and time of arrival on the cart user interface itself during the checkout process. This feature provides a convenient way for clients to input the necessary data to validate their orders. Store owners can create and delete new time zones to customize this feature according to their needs.
+The Cart Time Zones feature allows store owners' clients to choose their location, date, and time of arrival on the cart user interface itself during the checkout process. This feature provides a convenient way for clients to input the necessary data to validate their orders. Store owners can create and delete new time zones to customize this feature according to their needs.
 
-Please note that the Cart Time Zones Container feature has no styling customizations. If store owners want to style it, they must use CSS.
+To enable the Cart Time Zones, toggle the button in the plugin's dashboard, choose the fields that will be displayed during checkout, and create or delete new time zones to customize this feature according to your needs.
 
-To enable the Cart Time Zones Container, toggle the button in the plugin's dashboard, choose the fields that will be displayed during checkout, and create or delete new time zones to customize this feature according to your needs.
+Please note that the Cart Time Zones feature has no styling customizations. If store owners want to style it, they must use CSS.
 
 ## Why Use Itay's Upsell & Cart Time Zones?
 
 Upselling is a proven tactic that can help online stores increase sales by encouraging customers to purchase additional items. By showcasing related or complementary products through the Upsell feature, store owners can increase the average order value of their customers.
 
-The Cart Time Zones Container feature offers an easy and convenient way for store owners' clients to input necessary data, such as location and arrival time, during the checkout process. This feature can help ensure that orders are accurate and processed efficiently, which can improve the overall customer experience.
+The Cart Time Zones feature offers an easy and convenient way for store owners' clients to input necessary data, such as location and arrival time, during the checkout process. This feature can help ensure that orders are accurate and processed efficiently, which can improve the overall customer experience.
 
 Moreover, the plugin is completely AJAX-based, ensuring that user experience is not affected and it feels fluid.
 
