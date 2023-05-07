@@ -6,9 +6,9 @@
 
 
 /*
-Plugin Name: Itay Upsell & Cart Plugin Current
+Plugin Name: Itay Upsell & Cart Plugin
 Plugin URI: https://github.com/LaNguAx/itay-upsell-and-cart-plugin
-Description: A plugin that gives the store owner a feature to output a new products slider at the product page to increase sales. Also implements a dynamic cart.
+Description: Itay's Upsell & Cart Time Zones is a Wordpress Plugin and a WooCommerce & Side Cart Woocommerce's extension that allows online store owners to increase sales by displaying related products through the Upsell feature and providing a convenient way for customers to input location and arrival time through the Cart Time Zones feature.
 Version: 1.0.0
 Author: Itay Andre Aknin
 Author URI: https://www.linkedin.com/in/itay-aknin-aa5691270/

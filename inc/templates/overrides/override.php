@@ -12,7 +12,15 @@
  * @see     https://docs.xootix.com/side-cart-woocommerce/
  * @version 2.1
  */
+?>
 
+<?php
+
+/**
+ * 
+ * @package ItayUpsellAndCartPlugin
+ *  This is the override of the side cart plugin.   
+ */
 
 if (!defined('ABSPATH')) {
   exit; // Exit if accessed directly
@@ -48,7 +56,7 @@ extract(Xoo_Wsc_Template_Args::cart_container());
   <!-- Beginning of new code: -->
   <?php
   // To remove the cookie
-  setcookie('iucp_session_address', '', time() - 8000, COOKIEPATH, COOKIE_DOMAIN);
+  // setcookie('iucp_session_address', '', time() - 8000, COOKIEPATH, COOKIE_DOMAIN);
 
   if (!isset($_COOKIE['iucp_session_address'])) {
     do_action('iucp_initialize_address');

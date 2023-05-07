@@ -1,4 +1,13 @@
 <?php
+
+/**
+ * 
+ * @package ItayUpsellAndCartPlugin
+ *  
+ */
+?>
+
+<?php
 $product_categories = array();
 $products_within_categories = array();
 

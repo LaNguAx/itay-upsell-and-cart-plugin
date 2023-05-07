@@ -1,3 +1,12 @@
+<?php
+
+/**
+ * 
+ * @package ItayUpsellAndCartPlugin
+ *  
+ */
+?>
+
 <div class="wrap">
   <h1></h1>
   <?php settings_errors(); ?>

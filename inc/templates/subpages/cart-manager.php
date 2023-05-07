@@ -1,3 +1,12 @@
+<?php
+
+/**
+ * 
+ * @package ItayUpsellAndCartPlugin
+ *  
+ */
+?>
+
 <div class="wrap cart-manager">
   <ul class="nav nav-tabs">
     <li class="active"><a href="#tab-1">Cart Manager</a></li>

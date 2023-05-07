@@ -1,3 +1,12 @@
+<?php
+
+/**
+ * 
+ * @package ItayUpsellAndCartPlugin
+ *  
+ */
+?>
+
 <div class="iucp-cart-feature-container inactive">
   <button class="iucp-cart-feature-toggle-cart-button">🛒</button>
   <div class="iucp-cart-feature">
