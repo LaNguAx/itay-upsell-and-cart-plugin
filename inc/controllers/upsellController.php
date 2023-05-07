@@ -36,23 +36,47 @@ class UpsellController extends BaseController {
 
     $this->setSetting();
     $this->setSection();
-    add_action('admin_init', array($this, 'getProductCategories'), 9);
 
-    add_action('woocommerce_after_template_part', array($this, 'generateUpsellFrontend'), 10, 1);
+    $this->initiateHooks();
+
 
     $this->settings->setSubPages($this->subpages)->register();
   }
+  public function initiateHooks() {
+    add_action('init', array($this, 'iucpUpsellShortcode'));
+    add_action('admin_notices', array($this, 'changeSettingsSavedMessage'));
 
-  public function generateUpsellFrontend($template_name) {
-    if (is_product() && $template_name === 'single-product/up-sells.php') {
+    add_action('admin_init', array($this, 'getProductCategories'), 9);
+
+    add_action('woocommerce_after_template_part', array($this, 'generateUpsellFrontend'), 10, 1);
+  }
+
+  public function iucpUpsellShortcode() {
+    add_shortcode('upsell-frontend', function () {
+      ob_start();
       require_once($this->plugin_path . '/inc/templates/features/upsell-feature.php');
 
       wp_enqueue_style('user-styles-css', $this->plugin_url . '/build/userstyles.scss.css');
       wp_enqueue_script('upsell-slider-js', $this->plugin_url . '/build/slider.js', array(), 1.0, date("h:i:s"), true);
-      wp_localize_script('upsell-slider-js', 'storeData', array(
+      wp_add_inline_script('upsell-slider-js', 'const storeData = ' . json_encode(array(
         'siteUrl' => site_url(),
         'nonce' => wp_create_nonce('wc_store_api')
-      ));
+      )));
+      return ob_get_clean();
+    });
+  }
+
+  public function changeSettingsSavedMessage() {
+    $screen = get_current_screen();
+    if ($screen->id === 'itay-upsell-cart_page_itay_upsell_manager') {
+      return;
+    }
+  }
+
+
+  public function generateUpsellFrontend($template_name) {
+    if (is_product() && $template_name === 'single-product/up-sells.php') {
+      echo do_shortcode('[upsell-frontend]');
     }
   }
 

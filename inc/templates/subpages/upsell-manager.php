@@ -1,6 +1,7 @@
 <div class="wrap upsell-manager">
   <h1></h1>
-  <?php settings_errors();
+  <?php
+  settings_errors();
   $categories = get_option('iucp_upsell_manager_categories');
   $products_found = get_option('iucp_upsell_products');
   ?>
@@ -19,6 +20,8 @@
         do_settings_sections('itay_upsell_manager');
         submit_button();
         ?>
+        <input type="hidden" name="varname" value="var_value">
+
       </form>
     </div>
     <div id="tab-2" class="tab-pane <?php echo ($categories ? 'active' : 'hidden') ?> ">

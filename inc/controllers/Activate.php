@@ -42,7 +42,8 @@ class Activate {
           '12:00' => array('end_time' => '15:00', 'days' => array()),
           '15:00' => array('end_time' => '18:00', 'days' => array()),
           '18:00' => array('end_time' => '21:00', 'days' => array()),
-        )
+        ),
+        'iucp_cart_time_reducer' => 0
       );
       update_option('iucp_cart_manager_options', $defaults);
     }

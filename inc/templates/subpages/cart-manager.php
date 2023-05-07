@@ -1,7 +1,4 @@
 <div class="wrap cart-manager">
-  <?php settings_errors();
-  ?>
-
   <ul class="nav nav-tabs">
     <li class="active"><a href="#tab-1">Cart Manager</a></li>
   </ul>

@@ -45,6 +45,8 @@ class CartController extends BaseController {
     // add_filter('woocommerce_states', array($this, 'custom_woocommerce_states'));
     // add_filter('woocommerce_checkout_fields', array($this, 'updateShippingFields'));
 
+    add_action('admin_notices', array($this, 'changeSettingsSavedMessage'));
+
     add_action('wp_enqueue_scripts', array($this, 'load_scripts'));
 
     add_action('wp_ajax_iucp_create_date_time', array($this, 'handleAjax'));
@@ -55,6 +57,20 @@ class CartController extends BaseController {
       add_action('iucp_initialize_address', array($this, 'loadCartAddress'));
 
     add_filter('xoo_side-cart-woocommerce_template_located', array($this, 'replaceTemplate'), 10, 2);
+  }
+
+  public function changeSettingsSavedMessage() {
+    $screen = get_current_screen();
+    if ($screen->id === 'itay-upsell-cart_page_itay_cart_manager') {
+      if (isset($_GET['settings-updated'])) {
+?>
+        <div class="notice notice-success is-dismissible">
+          <p>Delivery time zones saved!</p>
+        </div>
+
+<?php
+      }
+    }
   }
 
   public function replaceTemplate($template, $template_name) {
@@ -156,8 +172,9 @@ class CartController extends BaseController {
     wp_enqueue_style('user-styles-css', $this->plugin_url . '/build/userstyles.scss.css');
 
 
-    $time_zones = get_option('iucp_cart_manager_options')['iucp_cart_time_zones'];
-    wp_localize_script('cart-js', 'iucpTimes', $time_zones);
+    $option_value = get_option('iucp_cart_manager_options', array());
+    $time_zones = isset($option_value['iucp_cart_time_zones']) ? $option_value['iucp_cart_time_zones'] : array();
+    wp_add_inline_script('cart-js', 'const iucpTimes = ' . json_encode(array_merge($time_zones, array('time_reducer' => $option_value['iucp_cart_time_reducer']))));
   }
 
   public function loadCartAddress() {
@@ -214,7 +231,21 @@ class CartController extends BaseController {
           'placeholder' => 'hh:mm',
           'description' => "hh:mm -> example: <strong>14:22</strong>"
         ),
+      ),
+      array(
+        'id' => 'iucp_cart_time_reducer',
+        'title' => 'Time Reducer',
+        'callback' => array($this->cart_callbacks, 'timeReducerOptionField'),
+        'page' => 'itay_cart_manager',
+        'section' => 'iucp_cart_manager_index',
+        'args' => array(
+          'option_name' => 'iucp_cart_manager_options',
+          'feature_name' => 'iucp_cart_time_reducer',
+          'placeholder' => '',
+          'description' => "Time to reduce <strong>start time</strong> by<br>e.g. - Time reducer = 1, then 14:00(start time) will be 13:00<br>Setting it to <strong>0</strong> will use the exact <strong>start time</strong> given.",
+        ),
       )
+
     );
     $this->settings->setFields($fields);
   }

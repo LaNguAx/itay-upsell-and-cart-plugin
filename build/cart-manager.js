@@ -26,6 +26,8 @@ class CartManager {
   #timeZonesInputs;
   #addTimeZoneBtn;
   #deleteTimeZoneBtn;
+  #days;
+  #markup;
   constructor() {
     window.addEventListener("DOMContentLoaded", () => {
       this.initializeVariables();
@@ -48,6 +50,7 @@ class CartManager {
     });
 
     // Time change
+
     this.#timeZonesInputs.forEach(element => {
       element.addEventListener("input", () => {
         this.timeChanged(element);
@@ -55,34 +58,39 @@ class CartManager {
     });
   }
   timeChanged(element) {
-    const parent = element.parentElement.parentElement;
+    const parent = element.closest(".iucp-time-zone-container");
+    const startTime = parent.querySelector("#start-time");
+    const endTime = parent.querySelector("#end-time");
+    const days = parent.querySelectorAll(".iucp_day_of_week");
+
+    // update time logic
     element.setAttribute("value", element.value);
-    const startTime = parent.querySelector("#start-time").value;
-    parent.querySelectorAll(".iucp-time-zone-input").forEach(element => {
-      if (element.id === "start-time") {
-        element.setAttribute("name", `iucp_cart_manager_options[iucp_cart_time_zones][${startTime}]`);
-      }
-      if (element.id === "end-time") {
-        element.setAttribute("name", `iucp_cart_manager_options[iucp_cart_time_zones][${startTime}][end_time]`);
-      }
+    startTime.setAttribute("name", `iucp_cart_manager_options[iucp_cart_time_zones][${startTime.value}]`);
+    endTime.setAttribute("name", `iucp_cart_manager_options[iucp_cart_time_zones][${startTime.value}][end_time]`);
+    startTime.setAttribute("max", endTime.value);
+    startTime.setAttribute("min", 0);
+    endTime.setAttribute("min", startTime.value);
+    endTime.setAttribute("max", endTime.value);
+
+    // update days time
+    days.forEach((element, idx) => {
+      element.setAttribute("name", `iucp_cart_manager_options[iucp_cart_time_zones][${startTime.value}][days][${this.#days[idx]}]`);
     });
-    if (element.id === "start-time") {
-      parent.querySelector("#end-time").setAttribute("min", element.value);
-    } else {
-      parent.querySelector("#start-time").setAttribute("max", element.value);
-    }
   }
   initializeVariables() {
     this.#timeZonesContainer = document.querySelector("#iucp_cart_time_zones");
     this.#timeZonesInputs = this.#timeZonesContainer.querySelectorAll(".iucp-time-zone-input");
     this.#addTimeZoneBtn = document.querySelector("#iucp-add-time-zone-button");
     this.#deleteTimeZoneBtn = document.querySelector("#iucp-delete-time-zone-button");
+    this.#days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
   }
   addTimeZone() {
     const markup = this.#timeZonesContainer.querySelector(".iucp-time-zone-container").cloneNode(true);
+    markup.insertAdjacentHTML("beforeend", `
+      <input type="submit" name="button" id="iucp-delete-time-zone-button" class="button delete iucp-flex" value="DELETE" style="margin-top: auto;">
+    <br>`);
     markup.value = "";
     this.#timeZonesContainer.append(markup);
-    this.#timeZonesContainer.insertAdjacentHTML("beforeend", "<br>");
     markup.querySelectorAll(".iucp-time-zone-input").forEach(element => {
       element.setAttribute("min", 0);
       element.setAttribute("max", 0);

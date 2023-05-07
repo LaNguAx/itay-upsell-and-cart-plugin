@@ -9,14 +9,27 @@
 namespace Inc\Callbacks;
 
 use Inc\Controllers\BaseController;
+use Mpdf\Tag\Dd;
 
 class UpsellCallbacks {
 
   public function validateProductsData($input_data) {
-
+    if ((!isset($input_data) || count($input_data) < 3) && !isset($_POST['update_products'])) {
+      add_settings_error(
+        'iucp_upsell_manager_options_group',
+        'setting-error',
+        'Please choose at least 3 categories'
+      );
+      return array();
+    }
     $output = get_option('iucp_upsell_manager_categories', array());
     if (isset($_POST['update_products'])) {
       $new_products = array();
+      if (!isset($_POST['new_products'])) {
+        add_settings_error('iucp_upsell_manager_options_group', 'settings-no-products-error', 'Please select products to continue.');
+        update_option('iucp_upsell_products', $new_products);
+        return $output;
+      }
       foreach ($_POST['new_products'] as $category => $products) {
         foreach ($products as $id => $product) {
           $new_products[$category][$id] =
@@ -24,10 +37,13 @@ class UpsellCallbacks {
         }
       }
       update_option('iucp_upsell_products', $new_products);
+      add_settings_error('iucp_upsell_manager_options_group', 'settings-add-products', 'Selected products have been saved and will be used for the upsell slider.', 'success');
+
       return $output;
     }
     update_option('iucp_upsell_products', array());
     $output = $input_data;
+    add_settings_error('iucp_upsell_manager_options_group', 'setting-success', 'Categories successfully updated!<br>Please select products you would like to showcase in the slider', 'success');
     return $output;
   }
 
@@ -72,6 +88,7 @@ class UpsellCallbacks {
       'iucp_upsell_slider_items_per_view' => 3
     );
     if ($_POST['submit'] === 'Reset') {
+      add_settings_error('iucp_upsell_manager_options_group', 'settings-reset', 'Settings have been reset.', 'success');
       return $defaults;
     }
 
@@ -82,6 +99,7 @@ class UpsellCallbacks {
         $output[$key] = $value;
       }
     }
+    add_settings_error('iucp_upsell_manager_options_group', 'settings-reset', 'Slider customizations have been saved!', 'success');
     return $output;
   }
 

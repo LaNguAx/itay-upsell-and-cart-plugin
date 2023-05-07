@@ -17,6 +17,7 @@ class DashboardCallbacks {
     foreach ($input_data as $key => $value) {
       $output[$key] = isset($key) ? true : false;
     }
+    add_settings_error('iucp_dashboard_settings', 'features-updated', 'Features toggle has been saved.', 'success');
     return $output;
   }
   public function sectionManager() {

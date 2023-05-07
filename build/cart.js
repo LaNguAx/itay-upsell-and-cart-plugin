@@ -11,8 +11,9 @@ class Cart {
   #siteTimes;
   #todaySelected;
   #daySelected;
+  #daysFound = [];
   #instantiated;
-  #timeReducer = 1;
+  #timeReducer = 0;
   #data = {
     date: undefined,
     time: undefined
@@ -65,23 +66,28 @@ class Cart {
       minute: "2-digit"
     });
     this.#userTime = newUserTime;
-    console.log(this.#siteTimes);
     let foundTimeZones = 0;
+    let todayTimeZones = 0;
     for (const [start, timeZoneData] of Object.entries(this.#siteTimes)) {
-      if (this.#todaySelected) {
-        if (this.#userTime < start) {
+      if (timeZoneData.days?.[this.#daySelected]) {
+        foundTimeZones++;
+        if (this.#todaySelected && this.#userTime < start) {
           this.#timePicker[0].innerHTML += `<option>${start}:${timeZoneData.end_time}</option>`;
-        } else {
-          this.#timePicker[0].innerHTML = `<option>Deliveries on ${this.#daySelected} are over.</option>`;
-          return;
+          todayTimeZones++;
+        }
+        if (!this.#todaySelected) {
+          this.#timePicker[0].innerHTML += `<option>${start}:${timeZoneData.end_time}</option>`;
         }
       }
-      if (timeZoneData.days[this.#daySelected]) {
-        foundTimeZones++;
-        this.#timePicker[0].innerHTML += `<option>${start}:${timeZoneData.end_time}</option>`;
-      }
     }
-    if (!foundTimeZones) this.#timePicker[0].innerHTML = `<option>We are not doing deliveries on ${this.#daySelected}</option>`;
+    if (this.#todaySelected && !todayTimeZones) {
+      this.#timePicker[0].innerHTML = `<option>Deliveries on ${this.#daySelected} are over.</option>`;
+      return;
+    }
+    if (!foundTimeZones) {
+      this.#timePicker[0].innerHTML = `<option>We are not doing deliveries on ${this.#daySelected}</option>`;
+      return;
+    }
   }
   submitForm() {
     //rendering a spinner
@@ -123,7 +129,7 @@ class Cart {
       minDate: 0,
       firstDay: 0,
       beforeShowDay: date => {
-        return [date.getDay() == 0 || date.getDay() == 1 || date.getDay() == 2 || date.getDay() == 3 || date.getDay() == 4 || date.getDay() == 5 || date.getDay() == 6];
+        return [this.#daysFound.includes(date.getDay())];
       },
       beforeShow: function (input, inst) {
         const rect = input.getBoundingClientRect();
@@ -137,6 +143,16 @@ class Cart {
       }
     });
     this.#timePicker = jQuery("#iucp_address_arrival_time");
+    const formatDays = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
+    for (const [_start, timeZoneData] of Object.entries(this.#siteTimes)) {
+      if (timeZoneData?.days) {
+        for (const day of Object.keys(timeZoneData.days)) {
+          if (this.#daysFound.includes(formatDays.indexOf(day))) continue;
+          this.#daysFound.push(formatDays.indexOf(day));
+        }
+      }
+    }
+    this.#timeReducer = Number(iucpTimes.time_reducer);
   }
 }
 
